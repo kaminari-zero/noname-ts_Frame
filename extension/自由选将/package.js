@@ -1,0 +1,9 @@
+extension["自由选将"]={
+	intro:"",
+	author:"仲哥！",
+	netdisk:"",
+	forum:"",
+	version:"1.0",
+	files:["djidjcnc.jpg","extension.js","package.js"],
+	size:"43KB"
+};
