@@ -21,15 +21,16 @@ module ZJNGEx {
                 };
 
                 //更新地址:
+                //目前游戏默认是使用 coding 配置的地址
                 lib.updateURLS = {
-                    //大佬的gitlab地址
-                    coding: 'http://ctos1197457256.asuscomm.com:30000/kaminari-zero/noname-ts/raw',
+                    //请自行替换地址
+                    coding: 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw', 
                     github: 'https://raw.githubusercontent.com/libccy/noname',
                     //真实coding地址
                     codingR: 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw'
                 };
                 //默认镜像
-                lib.updateURL = 'http://ctos1197457256.asuscomm.com:30000/kaminari-zero/noname-ts/raw';
+                lib.updateURL = 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw';
                 //备用镜像
                 lib.mirrorURL = 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw';
                 lib.hallURL = '192.168.1.192';

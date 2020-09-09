@@ -123,7 +123,6 @@ var NG;
         var DEBUG = true;
         var ALERT_DEBUG = false;
         DevUtil.version = "";
-        DevUtil.updateUrl = "http://ctos1197457256.asuscomm.com:30000/eve/noname-ts/raw/";
         Date.prototype.format = function (format) {
             if (!format) {
                 format = 'yyyy-MM-dd HH:mm:ss';
@@ -1440,11 +1439,11 @@ var ZJNGEx;
                 },
             };
             lib.updateURLS = {
-                coding: 'http://ctos1197457256.asuscomm.com:30000/kaminari-zero/noname-ts/raw',
+                coding: 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw',
                 github: 'https://raw.githubusercontent.com/libccy/noname',
                 codingR: 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw'
             };
-            lib.updateURL = 'http://ctos1197457256.asuscomm.com:30000/kaminari-zero/noname-ts/raw';
+            lib.updateURL = 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw';
             lib.mirrorURL = 'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw';
             lib.hallURL = '192.168.1.192';
             return null;

@@ -1,6 +1,13 @@
 # noname-ts_Frame
  无名杀，ts开发框架
 
+# noname-ts
+ 原项目链接：<https://github.com/libccy/noname/>，该项目的目的是为了解决代码提示问题，希望可以使用ts进行无名杀的扩展开发，虽然不能将游戏的逻辑代码都ts化，但尽量解决提示问题，顺便分析项目架构，标记中文注释
+
+## 当前依赖版本：v1.9.102
+
+
+
  # 开始准备
 ### 一，开发环境：vscode+js+ts+h5
 ### 二，测试环境：chrome
@@ -30,30 +37,13 @@
 不推荐暴露这些对象，还是按照游戏原有逻辑走，需要快捷调试时，可以考虑直接暴露（不过非常多余，内部准备了暴露这些对象的方式... ...）
 ```
 //需要使用let，let不会暴露到全局window内，var会自动绑定到全局window内
-let NonameGame;
-(function(nonameGame){
-    ... ... 游戏的原代码不用动
-    
-    //增加：
-	nonameGame.status=_status;
-	nonameGame.lib=lib;
-	nonameGame.game=game;
-	nonameGame.ui=ui;
-	nonameGame.get=get;
-	nonameGame.ai=ai;
-
-	//==============自定义方法===============
-	nonameGame.refreshGame = function(){
-		this.lib.init.init();
-	}
-})(NonameGame);
 
 注：已经放弃了该方式了，内部采用更加直接的方式暴露游戏对象，目的是为了方便开发测试，即使联机的情况下也可以使用命令调试（作弊），后续再对这方面屏蔽。
 ```
 
 3. 导入写好的interface文件夹内的.d.ts文件
 
-### 四，使用typescript编写扩展的准备
+### 四，使用typescript编写扩展的准备与一些注意事项
 1. 安装nodejs，前往
 [node.js官网](http://nodejs.cn/download/) 下载nodejs
 2. [还是直接上别人安装nodejs和国内镜像站cnpm或者直接装npm的教程就行了](https://www.cnblogs.com/liaojie970/p/9296177.html)。
@@ -137,6 +127,12 @@ tsconfig.json的配置：
 (注：该调试只能进行一些固定代码的调试，如果是使用new Function创建的方法代码，无法在代码里直接断点调试，那个要调试只能等报错时，会进入VMxxxx文件时，断点可以进行调试，不过比较麻烦，需要一步步慢慢调)
 
 10. 为了方便，已经在game.js添加了额外的加载方式，用来读取个人定制扩展加载，具体信息请查看test/test.js中注释了解；
+
+11. 更新地址使用默认coding，自行替换coding即可；(若需要apk包替换默认更新地址，需要修改好，重新签名apk：<https://blog.csdn.net/weixin_34387468/article/details/91985090>)
+
+12. 网上大佬生成exe的教程：<https://blog.csdn.net/MissYourKiss/article/details/105622652>；（没必要，直接使用群里现有版本就行）
+
+13. 该项目编译出来的代码，可以直接单独使用于扩展，可只用于开发测试使用；
 ---
 
 经过一年断断续续准备，搞好基础.d.ts声明文件，
@@ -154,6 +150,10 @@ tsconfig.json的配置：
 
 请注意，这个注释仅会隐藏报错，并且我们建议你 极少使用这一注释。不过可以用于导入别人的js代码时，不想修改成ts版本，可以直接使用// @ts-nocheck，不检测ts代码错误，直接进入编译；
 ---
+---
+
+## 本项目只用于开发，测试，线上运行更新要自行维护（自己更改自己的下载地址），还有任何一切纠纷，都与本人无关，我只是一个无感情的大自然搬运工！ by 神雷zero
+
 
 
 
