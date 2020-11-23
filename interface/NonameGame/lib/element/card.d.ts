@@ -84,10 +84,22 @@ declare namespace Lib.element {
         /**
          *  这张牌是否为【转化】的卡牌(视为牌)
          * 
-         * 是本来的卡牌，则为true,作为视为牌则为false/undefined;
+         * 最终确定：是非转化牌，包括“视为使用”的虚拟牌；
          * 
-         * 在chooseUseTarget中：
-         * if(get.is.object(card)&&!event.viewAs) card.isCard=true;
+         * 
+         * 注1：
+         * 在get.autoViewAs中，非autoViewAs：
+         *  isCard为true，或者是card的情况下，返回一个card信息，其isCard默认为true，没有cards，自身为cards；
+         *  若不是，只是普通的map对象，无cards参数，且当前存在cards情况下，返回携带该cards的card信息；
+         *  都不是，则按原来输出；
+         * 
+         * 注2：
+         * 在useCard中，if(cards.length&&!card.isCard) 下，视为则显示出其使用cards牌文本；
+         * 否则，不是作为视为，不显示对应cards文本；
+         * 故，该标记，在一些“直接视为使用了xxxx牌”的技能内，也使用isCard:true，是因为，这些技能都没有使用到任何卡牌，不需要显示则设置；
+         * 即，为了不显示使用牌的文本时，可设置isCard（作为不显示标记）；
+         * 
+         * 上面说法错了，应该是，虚拟牌可以设置不是转化，使用了isCard为true，即不是转化牌，即{name:'xxx',isCard:true};【具体操作在useCard中】
          */
         isCard:boolean;
 

@@ -4,7 +4,7 @@ module ZJNGEx {
         
         function(lib: Lib, game: Game, ui: UI, get: Get, ai: AI, _status: Status) {
             
-            let SkipPhaseSkill = {
+            let SkipPhaseSkill:SMap<ExSkillData> = {
                 zj_skip_Judge:{
                     name:"判定阶段",
                     description:"跳过玩家判定阶段",
@@ -56,9 +56,13 @@ module ZJNGEx {
                         player:NG.PhaseTrigger.phase+NG.TriggerEnum.Before
                     },
                     forced:true,
+                    lastDo:true,
                     content: function (event: GameEvent, player: Player, trigger: GameEvent, result: BaseResultData){
                         // player.phaseSkipped = true;
                         //跳过回合好像需要自己手动进行计数（稍后研究跳过回合的方式）
+                        // 可参考：_turnover
+                        trigger.cancel(); //会和_turnover冲突，不过它有firstDo，为了安全尝试放在同时机最后一刻
+                        player.phaseSkipped=true;//暂时没用
                     }
                 },
             }

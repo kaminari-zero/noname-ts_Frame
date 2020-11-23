@@ -1,6 +1,7 @@
 @import 'dialog.css';
 @import 'component.css';
 @import 'card.css';
+@import 'icon.css';
 
 html {
     background: rgb(60, 60, 60);
@@ -15,13 +16,36 @@ body>.background {
     100% { opacity: 1; }
 }
 
+#decadeUI-canvas,
+#decadeUI-canvas-sensor,
+#decadeUI-canvas-background {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+	pointer-events: none;
+}
+
+#decadeUI-canvas-sensor,
+#decadeUI-canvas-background {
+	z-index: -1;
+}
+
+#decadeUI-canvas-sensor {
+	opacity: 0;
+	visibility: hidden;
+}
+
 #decadeUI-animate-window,
 #decadeUI-animate-arena {
 	display: block;
 	position: absolute;
 	left: 0;
 	top: 0;
-	z-index: 888;
+	z-index: 4;
 	pointer-events: none;
 }
 
@@ -39,6 +63,10 @@ body>.background {
 #arena.phone {
     top: 2%;
 }
+
+/* #arena.dragging { */
+	/* cursor: default; */
+/* } */
 
 #window.leftbar #arena:not(.chess) {
 	width: auto;
@@ -75,6 +103,10 @@ body>.background {
 	text-shadow: 0 0 20px red;
 }
 
+#shortcut.hidden {
+	z-index: -1;
+}
+
 #window > #time {
 	left: 50px;
 	right: 50px;
@@ -84,8 +116,10 @@ body>.background {
 }
 
 .hand-zone, .hand-back {
-    width: 100%;
-    height: 150px;
+    left: 150px;
+	right: 150px;
+	width: auto;
+    height: 180px;
     bottom: 1%;
 	transition: none;
 }
@@ -107,15 +141,21 @@ body>.background {
 }
 
 .hand-cards {
+	display: inline-block;
 	width: 100%;
 	height: 100%;
-	transition: none !important;
+	transition: none;
+	z-index: 3;
 }
 
 .hand-cards>.handcards {
-	padding: 0px;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	top: 30px;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 30px);
+	min-width: 100%;
 	transition: none;
 }
 
@@ -125,6 +165,12 @@ body>.background {
     height: 150px;
 	position: absolute;
 	transition-property: transform, opacity, left, top;
+	z-index: 1;
+}
+
+.hand-cards>.handcards>.card.display-none {
+	display: none;
+	transition: none;
 }
 
 .hand-cards>.handcards>.card.selected {
@@ -246,6 +292,7 @@ body>.background {
 	text-shadow: 0 0 1px white, 0 0 3px white;
 	border: 1px solid black;
 	border-radius: 2px;
+	z-index: 1;
 }
 
 .card.decade-card:not(*[data-card-type='basic'])>.name {
@@ -277,6 +324,7 @@ body>.background {
 	font-size: 20px;
 	font-family: shousha;
 	text-align: center;
+	z-index: 1;
 }
 
 .card.decade-card>.top-name {
@@ -374,10 +422,11 @@ body>.background {
 	text-shadow: 0 0 3px #ffffff, 0 0 8px #ffffff;
     letter-spacing: -1px;
     transform-origin: 0 0;
+	z-index: 1;
 }
 
-.mobile-phone .card>.suit-num>span:last-child {
-    font-size: 1rem;
+.mobile-phone .card>.suit-num>.suit {
+    font-size: 16px;
 }
 
 .card[data-suit='heart']>.suit-num,
@@ -444,6 +493,7 @@ body>.background {
 	align-content: center;
 	justify-content: center;
 	font-family: 'STHeiti', 'SimHei', 'Microsoft JhengHei', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Helvetica,Arial, sans-serif !important;
+	z-index: 1;
 }
 
 
@@ -461,6 +511,7 @@ body>.background {
 	background-color: rgba(0, 0, 0, 0.4);
 	border-radius: inherit;
 	transition: none;
+	z-index: 4;
 }
 
 .card.invalided>.card-mask,
@@ -510,6 +561,7 @@ body>.background {
     bottom: 27% !important;
     width: auto;
     background: none;
+	transform: none !important;
     transition-duration: 0.3s;
 }
 
@@ -549,8 +601,10 @@ body>.background {
 #arena.decadeUI:not(.chess):not(.choose-character):not(.game-over) #control {
     transition: all 0.3s;
 	position: absolute;
-    top: auto;
+    left: 120px;
+	top: auto;
     bottom: calc(27% + 28px);
+	width: calc(100% - 240px);
 }
 
 #arena.decadeUI.phone:not(.chess):not(.choose-character):not(.game-over) #control,

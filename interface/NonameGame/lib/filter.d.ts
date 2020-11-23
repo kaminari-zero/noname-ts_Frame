@@ -103,6 +103,7 @@ declare namespace Lib {
         targetEnabled(card: {name:string}, player: Player, target: Player): boolean;
         /**
          * 可指定目标2
+         * 在执行targetEnabled基础上，若为false，则执行下面：
          * 其中检测当前玩家身上的“playerEnabled”，“targetEnabled”锁定技mod；
          * 主要是额外执行了判断card.modTarget
          * @param card 
@@ -113,7 +114,7 @@ declare namespace Lib {
         /**
          * 可指定目标3
          * 没有检测当前玩家身上的“playerEnabled”，“targetEnabled”锁定技mod；
-         * 额外执行了判断card.filterTarget，card.modTarget
+         * 只执行了判断card.filterTarget，card.modTarget
          * @param card 
          * @param player 
          * @param target 

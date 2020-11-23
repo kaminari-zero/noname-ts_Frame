@@ -1,0 +1,332 @@
+.card,
+.button.card {
+  --h: 120px;
+  --w: calc(var(--h) * 185 / 250);
+  --name-w: calc(var(--w) * 155 / 185);
+  --name-h: calc(var(--name-w) * 40 / 165);
+  --margin-w: calc(var(--w) - var(--name-w));
+  --radius: 4px;
+  width: var(--w);
+  height: var(--h);
+  border-radius: var(--radius) !important;
+}
+.button.card {
+  --w: 90px;
+  --h: calc(var(--w) * 250 / 185);
+}
+.card.thrown.removing {
+  width: var(--w);
+  height: var(--h);
+}
+.card > .disbg {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  background-image: url("./images/carddis.png");
+  background-size: 100% 100%;
+  z-index: 100;
+  opacity: 0;
+}
+#arena.selecting:not(.video) .dialog:not(.noselect) .button.card:not(.selectable):not(.noclick),
+#arena.selecting:not(.video) #me .card:not(.selectable) {
+  opacity: 1;
+}
+#arena.selecting:not(.video) .dialog:not(.noselect) .button.card:not(.selectable):not(.noclick) > .disbg,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .disbg {
+  opacity: 1;
+}
+
+.card::before,
+.card::after {
+  border-radius: var(--radius) !important;
+}
+
+.card:empty,
+.card.infohidden {
+  background-image: url("./images/cardback.png") !important;
+  background-size: cover;
+}
+
+.card.fullskin {
+  background-image: url("./images/card.png") !important;
+  background-size: cover;
+}
+.card.fullskin > .image {
+  --iw: calc(var(--w) * 162 / 185);
+  --ih: calc(var(--iw) * 140 / 162);
+  --im: calc((var(--w) - var(--iw)) / 2);
+  top: auto;
+  left: var(--im);
+  bottom: var(--im);
+  width: var(--iw);
+  height: var(--ih);
+  border-radius: 4px;
+}
+
+.card.fullskin > .cardType,
+.button.card.fullskin > .info {
+  font-family: 'HYZLSJ';
+  color: #918a78;
+  text-align: center;
+  transform: translate(-50%, 0) !important;
+}
+.card.fullskin > .cardType,
+div:not(.handcards).menu-buttons>.button.card.fullskin>.info {
+  --iw: calc(var(--w) * 162 / 185);
+  --ih: calc(var(--iw) * 140 / 162);
+  --im: calc((var(--w) - var(--iw)) / 2);
+  --bottom: calc(var(--h) - var(--ih) + var(--im));
+  top: auto;
+  left: 50%;
+  bottom: var(--bottom);
+  transform: translate(calc(-50% + 3px), calc(-100% - 5px)) !important;
+}
+.card.fullskin[data-card-type="basic"] > .cardType,
+div:not(.handcards).menu-buttons>.button.card.fullskin[data-card-type="basic"] > .info {
+  display: none;
+}
+.card.fullskin[data-card-type="equip"] > .cardType,
+.card.fullskin[data-card-type="trick"] > .cardType,
+.card.fullskin[data-card-type="delay"] > .cardType,
+div:not(.handcards).menu-buttons>.button.card.fullskin[data-card-type="equip"] > .info,
+div:not(.handcards).menu-buttons>.button.card.fullskin[data-card-type="trick"] > .info,
+div:not(.handcards).menu-buttons>.button.card.fullskin[data-card-type="delay"] > .info {
+  --ch: 12px;
+  --cw: calc(var(--ch) * 42 / 18);
+  width: var(--cw);
+  height: var(--ch);
+  overflow: hidden;
+  text-indent: -9999px;
+  background-size: 100% 100%;
+}
+.card.fullskin[data-card-type="equip"] > .cardType,
+div:not(.handcards).menu-buttons>.button.card[data-card-type="equip"] > .info {
+  background-image: url("./images/equip.png");
+}
+.card.fullskin[data-card-type="trick"] > .cardType,
+.card.fullskin[data-card-type="delay"] > .cardType,
+div:not(.handcards).menu-buttons>.button.card[data-card-type="trick"] > .info,
+div:not(.handcards).menu-buttons>.button.card[data-card-type="delay"] > .info {
+  background-image: url("./images/trick.png");
+}
+
+.card.fullskin > .name {
+  left: var(--margin-w);
+  width: var(--name-w);
+  height: var(--name-h);
+  border: none;
+  white-space: nowrap;
+  line-height: var(--name-h);
+  font-family: 'HYZLSJ';
+  font-size: 18px;
+  background-image: url("./images/cardname.png");
+  background-size: 100% 1005;
+  transform-origin: inherit !important;
+  border: none !important;
+  color: #29291b !important;
+  padding: 0 !important;
+  transform: none !important;
+  overflow: hidden;
+}
+.card.fullskin > .name > br {
+  display: none;
+}
+.card.fullskin > .name[data-name-image] {
+  left: 0;
+  width: 100%;
+  height: calc(2 * var(--name-h));
+  text-indent: -9999px;
+  overflow: hidden;
+  background-size: auto 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card > .viewAs > div[data-name-image="sha"],
+.card.fullskin > .name[data-name-image="sha"] {
+  background-image: url("./images/name/sha.png");
+}
+.card > .viewAs > div[data-name-image="sha"][data-card-nature="fire"],
+.card.fullskin > .name[data-name-image="sha"][data-card-nature="fire"] {
+  background-image: url("./images/name/huosha.png");
+}
+.card > .viewAs > div[data-name-image="sha"][data-card-nature="thunder"],
+.card.fullskin > .name[data-name-image="sha"][data-card-nature="thunder"] {
+  background-image: url("./images/name/leisha.png");
+}
+.card > .viewAs > div[data-name-image="shan"],
+.card.fullskin > .name[data-name-image="shan"] {
+  background-image: url("./images/name/shan.png");
+}
+.card > .viewAs > div[data-name-image="jiu"],
+.card.fullskin > .name[data-name-image="jiu"] {
+  background-image: url("./images/name/jiu.png");
+}
+.card > .viewAs > div[data-name-image="tao"],
+.card.fullskin > .name[data-name-image="tao"] {
+  background-image: url("./images/name/tao.png");
+}
+
+.card.fullskin > .suitNumber {
+  top: 8px;
+  left: calc(var(--margin-w) / 2 + 2px);
+  width: var(--margin-w);
+  transform: translateX(-50%);
+}
+.suitNumber > div.suit,
+.suitNumber > div.number {
+  width: calc(2 * var(--margin-w));
+  height: 14px;
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  transform: translateX(-25%);
+  display: block;
+}
+.suitNumber > div.suit {
+  margin-top: 2px;
+}
+
+.xplayer > .judges > .card.fullskin > .image {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+}
+
+#arena:not(.chess) #me,
+#arena:not(.chess) #mebg,
+#arena:not(.chess) #handcards1,
+#arena:not(.chess) #handcards2 {
+  --h: 136px;
+  height: var(--h);
+}
+
+
+#arena:not(.single-handcard):not(.chess).cxy-new-ui > #mebg,
+#arena:not(.single-handcard):not(.chess).cxy-new-ui > #me {
+  left: 0px !important;
+  bottom: 0px !important;
+}
+
+#arena:not(.chess) #handcards1,
+#arena:not(.chess) #handcards2 {
+  top: 0;
+}
+
+#arena:not(.chess) #handcards1.scrollh > div,
+#arena:not(.chess) #handcards2.scrollh > div {
+  top: 44px;
+  height: var(--h);
+}
+
+#arena.cxy-new-ui:not(.choose-character) > #control {
+  bottom: 160px;
+}
+
+.card:not([data-view-as-card]) > .viewAs {
+  display: none;
+}
+.card > .viewAs {
+  --vh: calc(var(--name-h) * 1.5);
+  left: 0;
+  top: calc(50% - var(--vh) / 2);
+  width: 100%;
+  height: var(--vh);
+  background-image: url("./images/viewasname.png");
+  background-size: cover;
+}
+.card > .viewAs > div {
+  top: 50%;
+  left: 50%;
+  height: var(--name-h);
+  line-height: var(--name-h);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  font-family: 'HYZLSJ';
+  font-weight: bold;
+  font-size: 18px;
+}
+.card > .viewAs > div[data-name-image] {
+  width: 100%;
+  text-indent: -9999px;
+  overflow: hidden;
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.card > .changeMark {
+  --s: 20px;
+  --m: 5px;
+  top: var(--m);
+  right: var(--m);
+  width: var(--s);
+  height: var(--s);
+  background-image: url("./images/change.png");
+  background-size: cover;
+}
+.card:not([data-change-card]) > .changeMark {
+  display: none;
+}
+
+.card > .virtualMark {
+  --sw: 14px;
+  --sh: calc(var(--sw) * 32 / 19);
+  top: 20px;
+  left: 8px;
+  width: var(--sw);
+  height: var(--sh);
+  background-image: url("./images/virtual.png");
+  background-size: cover;
+}
+.card:not([data-virtual-card]) > .virtualMark {
+  display: none;
+}
+
+.xjudge {
+  --h: 20px;
+  width: 100px;
+  height: var(--h);
+}
+.xjudge::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.xjudge > div {
+  float: left;
+  width: var(--h);
+  height: var(--h);
+  text-align: center;
+  line-height: var(--h);
+  font-family: 'HYZLSJ';
+  color: #333;
+  position: relative;
+}
+.xjudge > div::before {
+  content: '';
+  position: absolute;
+  width: var(--h);
+  height: var(--h);
+  top: 0;
+  left: 0;
+  transform: rotate(45deg);
+  background-color: #EDE5D4;
+  background-size: 100% 100%;
+  border-radius: 4px;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, .3);
+  z-index: -1;
+}
+
+.xplayer > .xjudge {
+  top: calc(100% + 2px);
+  left: 0;
+}
+#arena > .xjudge {
+  left: 55px;
+  bottom: 140px;
+}

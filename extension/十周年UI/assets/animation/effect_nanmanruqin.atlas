@@ -1,0 +1,97 @@
+
+effect_nanmanruqin.png
+size: 979,730
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+SF_eff_jiangling_nanmanruqing_0000
+  rotate: false
+  xy: 90, 22
+  size: 136, 97
+  orig: 300, 310
+  offset: 23, 209
+  index: -1
+SF_eff_jiangling_nanmanruqing_0002
+  rotate: true
+  xy: 252, 2
+  size: 139, 189
+  orig: 300, 310
+  offset: 24, 117
+  index: -1
+SF_eff_jiangling_nanmanruqing_0004
+  rotate: true
+  xy: 499, 2
+  size: 185, 240
+  orig: 300, 310
+  offset: 17, 69
+  index: -1
+SF_eff_jiangling_nanmanruqing_0006
+  rotate: false
+  xy: 762, 236
+  size: 213, 235
+  orig: 300, 310
+  offset: 17, 75
+  index: -1
+SF_eff_jiangling_nanmanruqing_0008
+  rotate: false
+  xy: 252, 143
+  size: 245, 285
+  orig: 300, 310
+  offset: 17, 24
+  index: -1
+SF_eff_jiangling_nanmanruqing_0010
+  rotate: false
+  xy: 2, 121
+  size: 248, 302
+  orig: 300, 310
+  offset: 17, 5
+  index: -1
+SF_eff_jiangling_nanmanruqing_0012
+  rotate: false
+  xy: 245, 430
+  size: 248, 298
+  orig: 300, 310
+  offset: 17, 12
+  index: -1
+SF_eff_jiangling_nanmanruqing_0014
+  rotate: false
+  xy: 2, 425
+  size: 241, 303
+  orig: 300, 310
+  offset: 17, 2
+  index: -1
+SF_eff_jiangling_nanmanruqing_0016
+  rotate: true
+  xy: 495, 458
+  size: 270, 265
+  orig: 300, 310
+  offset: 17, 0
+  index: -1
+SF_eff_jiangling_nanmanruqing_0018
+  rotate: true
+  xy: 499, 189
+  size: 267, 259
+  orig: 300, 310
+  offset: 20, 4
+  index: -1
+SF_eff_jiangling_nanmanruqing_0020
+  rotate: false
+  xy: 762, 473
+  size: 215, 255
+  orig: 300, 310
+  offset: 72, 0
+  index: -1
+SF_eff_jiangling_nanmanruqing_0022
+  rotate: false
+  xy: 760, 47
+  size: 205, 187
+  orig: 300, 310
+  offset: 82, 0
+  index: -1
+SF_eff_jiangling_nanmanruqing_0024
+  rotate: true
+  xy: 2, 8
+  size: 111, 86
+  orig: 300, 310
+  offset: 176, 21
+  index: -1

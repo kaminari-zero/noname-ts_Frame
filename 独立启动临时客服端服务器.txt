@@ -1,0 +1,18 @@
+https://blog.csdn.net/jsyxiaoba/article/details/89177444?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.channel_param
+
+https://www.cnblogs.com/nolaaaaa/p/9126385.html
+
+
+1.安装node.js
+2.在这个文件夹里，按着shift键，然后右击鼠标，选择“在此处打开命令窗口”；
+3.命令窗口调出之后，执行命令，npm install http-server -g 安装服务依赖；
+4.安装成功之后，再执行 http-server 命令，起服务
+
+注：一定确保手机和电脑连得是同一个局域网（wifi），然后在手机浏览器里输入上图第一个地址
+http://(这里是电脑ip):8080  
+默认是index.html，可以自己指定添加后续；
+8080端口是自动生成的；
+
+设置  ip，端口，同步更新
+
+http-server -a 127.0.0.1 -p 8080 -c-1

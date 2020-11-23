@@ -67,6 +67,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				type:'basic',
 				enable:true,
 				usable:1,
+				updateUsable:'phaseUse',
 				range:{attack:1},
 				selectTarget:1,
 				filterTarget:function(card,player,target){return player!=target},
@@ -276,7 +277,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[8,6.5,5,4],
 					},
 					result:{
-						target:function(player,target){
+						target:2,
+						target_use:function(player,target){
 							// if(player==target&&player.hp<=0) return 2;
 							if(player.hasSkillTag('nokeep',true,null,true)) return 2;
 							var nd=player.needsToDiscard();
@@ -909,10 +911,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					if(typeof event.baseDamage!='number') event.baseDamage=1;
 					if(typeof event.extraDamage!='number'){
 						event.extraDamage=0;
-						if(!event.shaReq) event.shaReq={};
-						if(typeof event.shaReq[player.playerid]!='number') event.shaReq[player.playerid]=1;
-						if(typeof event.shaReq[target.playerid]!='number') event.shaReq[target.playerid]=1;
 					}
+					if(!event.shaReq) event.shaReq={};
+					if(typeof event.shaReq[player.playerid]!='number') event.shaReq[player.playerid]=1;
+					if(typeof event.shaReq[target.playerid]!='number') event.shaReq[target.playerid]=1;
 					event.playerCards=[];
 					event.targetCards=[];
 					"step 1"
@@ -1661,7 +1663,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				onremove:true,
 				trigger:{
 					player:['damage','damageCancelled','damageZero'],
-					target:['shaMiss','useCardToExcluded'],
+					target:['shaMiss','useCardToExcluded','shaEnd'],
+					global:['useCardEnd'],
 				},
 				charlotte:true,
 				filter:function(event,player){
@@ -1733,11 +1736,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					});
 					next.logSkill='guanshi_skill';
 					next.set('ai',function(card){
-						var evt=_status.event.getParent();
-						if(get.attitude(evt.player,evt._trigger.target)<0){
-							if(evt.player.hasSkill('jiu')||
-							evt.player.hasSkill('tianxianjiu')||
-							evt._trigger.target.hp==1){
+						var evt=_status.event.getTrigger();
+						if(get.attitude(evt.player,evt.target)<0){
+							if(evt.baseDamage+evt.extraDamage>=Math.min(2,evt.target.hp)){
 								return 8-get.value(card)
 							}
 							return 5-get.value(card)

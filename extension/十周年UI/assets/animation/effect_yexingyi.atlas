@@ -1,0 +1,125 @@
+
+effect_yexingyi.png
+size: 440,440
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+6/yexingyi_yanwu_00
+  rotate: false
+  xy: 140, 26
+  size: 89, 52
+  orig: 193, 128
+  offset: 55, 35
+  index: -1
+6/yexingyi_yanwu_01
+  rotate: false
+  xy: 231, 21
+  size: 108, 62
+  orig: 193, 128
+  offset: 44, 29
+  index: -1
+6/yexingyi_yanwu_02
+  rotate: true
+  xy: 355, 104
+  size: 120, 66
+  orig: 193, 128
+  offset: 38, 27
+  index: -1
+6/yexingyi_yanwu_03
+  rotate: false
+  xy: 298, 226
+  size: 126, 70
+  orig: 193, 128
+  offset: 35, 25
+  index: -1
+6/yexingyi_yanwu_04
+  rotate: true
+  xy: 211, 87
+  size: 132, 72
+  orig: 193, 128
+  offset: 31, 24
+  index: -1
+6/yexingyi_yanwu_05
+  rotate: false
+  xy: 2, 71
+  size: 136, 71
+  orig: 193, 128
+  offset: 29, 25
+  index: -1
+6/yexingyi_yanwu_06
+  rotate: false
+  xy: 159, 221
+  size: 136, 71
+  orig: 193, 128
+  offset: 29, 25
+  index: -1
+6/yexingyi_yanwu_07
+  rotate: false
+  xy: 2, 218
+  size: 138, 71
+  orig: 193, 128
+  offset: 29, 25
+  index: -1
+6/yexingyi_yanwu_08
+  rotate: false
+  xy: 2, 144
+  size: 136, 72
+  orig: 193, 128
+  offset: 30, 24
+  index: -1
+6/yexingyi_yanwu_09
+  rotate: false
+  xy: 159, 294
+  size: 137, 71
+  orig: 193, 128
+  offset: 30, 25
+  index: -1
+6/yexingyi_yanwu_10
+  rotate: false
+  xy: 299, 368
+  size: 138, 70
+  orig: 193, 128
+  offset: 30, 25
+  index: -1
+6/yexingyi_yanwu_11
+  rotate: false
+  xy: 159, 367
+  size: 138, 71
+  orig: 193, 128
+  offset: 31, 25
+  index: -1
+6/yexingyi_yanwu_12
+  rotate: true
+  xy: 140, 80
+  size: 136, 69
+  orig: 193, 128
+  offset: 32, 26
+  index: -1
+6/yexingyi_yanwu_13
+  rotate: true
+  xy: 285, 85
+  size: 134, 68
+  orig: 193, 128
+  offset: 32, 27
+  index: -1
+6/yexingyi_yanwu_14
+  rotate: false
+  xy: 299, 298
+  size: 133, 68
+  orig: 193, 128
+  offset: 31, 27
+  index: -1
+6/yexingyi_yanwu_15
+  rotate: false
+  xy: 2, 2
+  size: 131, 67
+  orig: 193, 128
+  offset: 33, 27
+  index: -1
+yexingyi
+  rotate: false
+  xy: 2, 291
+  size: 155, 147
+  orig: 155, 147
+  offset: 0, 0
+  index: -1

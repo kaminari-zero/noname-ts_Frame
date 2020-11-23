@@ -11,7 +11,7 @@
         // "outDir":"./build", //指定编译后文件输出的位置，输出的文件不合并
         // "outDir":"extension", 
         // "sourceRoot": "./exsrc/", //源文件路径
-        "sourceMap": true, //开启这个，可以生成一个map映射文件，可以在ts代码断点，调试时跳到ts代码里
+        "sourceMap": true,
         // "rootDir": "./exsrc/", //根目录（跟sourceRoot一致就行）
         // "noImplicitAny": true, //在表达式和声明上有隐含的 any类型时报错
         // "module": "none",  //模块化的风格，none，CommonJS，AMD......
@@ -44,7 +44,14 @@
         //这样时编译所有
         // "exsrc/*"
         //采用第二种方式时，需要自己指定编译文件的具体路径：
-        "exsrc/ZJ联盟杀"
-        // "exsrc/加载测试扩展/*"
+        // zj联盟杀：
+        "exsrc/ZJ联盟杀",
+        // "exsrc/测试代码"
+        // "exsrc/加载测试扩展"
+        // 注：目前还不知道怎么把一个文件夹当做一个模块打包，故同一项目，放多个扩展的时候，需要编译哪个扩展，就在这里手动切换改动一下
+    ],
+    //排除编译：
+    "exclude": [
+        "exsrc/测试代码"
     ]
 }

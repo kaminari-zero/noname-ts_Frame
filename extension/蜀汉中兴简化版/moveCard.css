@@ -1,0 +1,86 @@
+/*代码来源:https://blog.csdn.net/weixin_42100456/article/details/106354244*/
+.moveCard-dialog {
+   	display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 850px;
+    height: 380px;    
+   /* border-width: 29px 4px 4px 4px;*/
+    background-size: 100% 100%;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background-image: url('switch_dialog.png');
+  /*  border-image-slice: 29 4 4 4 fill;*/
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    /*transition-property: opacity, transform, width, height;*/
+   	transition-duration: 0.8s;
+}
+.moveCard-dialog>.moveCard-dialog2 {
+   	display: block;   
+    height:calc(50% - 25px);
+    top:30px;
+    width:calc(100% - 10px);
+    left:15px;
+    /*overflow-y:scroll;    */
+    z-index: 0;    
+}
+
+.moveCard-dialog >.moveCard-dialog2 > .moveCard {
+   	position: relative;
+   	margin: 5px;
+   	top:20px;
+   	width: 80px;
+   	height: 120px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    box-shadow: 0 0 5px black;
+}
+.moveCard-dialog>.moveCard-dialog3 {
+   	display: block;   
+    height:calc(50% - 25px);
+    top:170px;
+    width:calc(100% - 10px);
+    left:15px;
+   /* overflow-y:scroll;    */
+    z-index: 0;    
+}
+
+.moveCard-dialog >.moveCard-dialog3 > .moveCard {
+   	position: relative;
+   	margin: 5px;
+   	top:20px;
+   	width: 80px;
+   	height: 120px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    box-shadow: 0 0 5px black;
+}
+.moveCard-dialog >.caption {
+   	display: block;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 18px;
+    line-height: 18px;
+    color: rgb(220,220,180);
+    font-size: 20px;
+    font-family: shousha;
+    text-align: center;
+   	pointer-events: none;
+}
+.moveCard-dialog > .close-button {
+   	display: block;
+    position: absolute;
+    top: calc(100% - 35px);
+    left: 42%;
+    width: 100px;
+    height: 30px;
+    background-image: url('moveCard-close.jpg');
+   	background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+

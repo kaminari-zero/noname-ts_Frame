@@ -1,9 +1,11 @@
 declare namespace UI {
 
     interface Click {
-        identitycircle(): any;
-        connectEvents(): any;
-        connectClients(): any;
+        /** 点击身份icon */
+        identitycircle(): void;
+        /** 联机约战 */
+        connectEvents(): void;
+        connectClients(): void;
         //切换皮肤相关
         autoskin(): any;
         skin(avatar, name, callback): any;

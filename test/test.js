@@ -164,7 +164,7 @@ window.gameTestLog = function(){
 window.loadSelfExtensionConfig = ["ZJ联盟杀","十六人扩展精简版"];//,"加载测试扩展"
 //以后将全部移植到extension中，走正式加载流程，毕竟有css，jpg，它们默认的相对路径都在那里
 //正式加载的，都是别人完整的扩展，即extension/ 里面的扩展
-window.loadExtensionConfig = ["代码搜索器","武将搜索器","未来科技"/*,"十周年UI"*/];//,"自由选将" 感觉没什么用
+window.loadExtensionConfig = ["代码搜索器","武将搜索器","未来科技","蜀汉中兴简化版"/*,"十周年UI" ,"界面美化" */];//,"自由选将" 感觉没什么用
 /*
 代码保存，代码添加到loadPack方法得末尾
 搜索关键字：var loadPack=function()
@@ -193,6 +193,42 @@ if(Array.isArray(loadExtensionConfig)) {
 //game/config.js
 loadSelfExtensionConfig:["ZJ联盟杀","十六人扩展精简版"],//"加载测试扩展"【直接整合进来】
 loadExtensionConfig:["十周年UI","未来科技"],//正规扩展
+
+//后续尝试新版加载测试：
+可以尝试先加载完个人扩展，然后在ZJ联盟杀，的扩展中针对正规扩展的控制；
+又或者反过来，先加载正规扩展，后加载个人，用于覆盖正规扩展的一些方法；
+-----2020-9-30
+使用客户端服务，网页链接时，发现，加载报错，应该时顺序问题，看来是需要改一下，非本地加载速度不稳定；
+
+//新得加载方式：该方式，约定，个人扩展最后会覆盖正式扩展precontent加载得内容；
+// 正式扩展加载
+let loadExtensionConfig = window.loadExtensionConfig||lib.config.loadExtensionConfig;
+if(Array.isArray(loadExtensionConfig)) {
+    toLoad += loadExtensionConfig.length;
+    let loadExtensionNum = 0;
+    let tempLoadExFun = function() {
+        loadExtensionNum++;
+        if(loadExtensionNum >= loadExtensionConfig.length) {
+            //个人扩展
+            let loadSelfExtensionConfig = window.loadSelfExtensionConfig||lib.config.loadSelfExtensionConfig;
+            if(Array.isArray(loadSelfExtensionConfig)) {
+                toLoad += loadSelfExtensionConfig.length;
+                packLoaded(); //加载完一定数量后，添加新得加载数，在添加后再执行一次加载计数
+                for (var i = 0; i < loadSelfExtensionConfig.length;i++){
+                    lib.init.js(lib.assetURL + "build/exsrc/" + loadSelfExtensionConfig[i], "extension", packLoaded, packLoaded);
+                }
+            }
+            return;
+        }
+        packLoaded();
+    }
+    for (var i = 0; i < loadExtensionConfig.length;i++){
+        lib.init.js(lib.assetURL + "extension/" + loadExtensionConfig[i], "extension", tempLoadExFun, tempLoadExFun);
+    }
+}
+
+//后续修改：正式扩展，若没有，则无法加载个人扩展，这逻辑还是有点问题，以后遇到再改了
+
 
 第二种编译方式：编译后输出的文件，输出文件合并成一个指定js（缺点：每次只能指定编译成一个文件，不利于多扩展编译）
 临时解决方案：可在另一个项目内完成，编译完后，打包扩展；

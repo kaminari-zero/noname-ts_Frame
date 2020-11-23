@@ -583,7 +583,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						cards = decadeUI.get.bestValueCards(cards, friend);
 					} else {
 						cards.sort(function(a, b){
-							get.value(a, next) - get.value(b, next);
+							return get.value(a, next) - get.value(b, next);
 						});
 					}
 
@@ -738,7 +738,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					for (var i = 0; i < cheats.length; i++) {
 						setTimeout(function(card, index, finished){
 							dialog.move(card, index, 1);
-							if (finished) dialog.finishTime(1000);
+							if (finished) dialog.finishTime(cards.length <= 1 ? 250 : 1000);;
 						}, time, cheats[i], i, (i >= cheats.length - 1));
 						time += 500;
 					}
@@ -872,7 +872,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						cards = decadeUI.get.bestValueCards(cards, friend);
 					} else {
 						cards.sort(function(a, b){
-							get.value(a, next) - get.value(b, next);
+							return get.value(a, next) - get.value(b, next);
 						});
 					}
 
@@ -881,7 +881,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					for (var i = 0; i < cards.length; i++) {
 						setTimeout(function(card, index, finished){
 							dialog.move(card, index, 0);
-							if (finished) dialog.finishTime(1000);
+							if (finished) dialog.finishTime(cards.length <= 1 ? 250 : 1000);;
 						}, time, cards[i], i, i >= cards.length - 1);
 						time += 500;
 					}
@@ -918,7 +918,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						}
 						return false;
 					},
-					direct: true,
+					// direct: true,
 					content: function() {
 						"step 0"
 						if (trigger.delay == false) game.delay();
@@ -940,6 +940,10 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						dialog.header2 = '获得牌';
 						dialog.tip = '请选择要获得的牌';
 						dialog.lockCardsOrder(0);
+						dialog.cards[1] = dialog.cards[0];
+						dialog.cards[0] = [];
+						dialog.update();
+						dialog.onMoved();
 						dialog.callback = function(){ return true; };
 						game.broadcast(function(player, cards, callback){
 							if (!window.decadeUI) return;
@@ -949,20 +953,39 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 							dialog.header2 = '获得牌';
 							dialog.tip = '请选择要获得的牌';
 							dialog.lockCardsOrder(0);
+							dialog.cards[1] = dialog.cards[0];
+							dialog.cards[0] = [];
+							dialog.update();
+							dialog.onMoved();
 							dialog.callback = callback;
 						}, player, cards, dialog.callback);
 						
 						event.switchToAuto = function(){
-							var cards = dialog.cards[0].concat();
-							cards = decadeUI.get.bestValueCards(cards, player);
-							
+							var cards = dialog.cards[1].concat();
 							var time = 500;
-							for (var i = 0; i < cards.length; i++) {
-								setTimeout(function(card, index, finished){
-									dialog.move(card, index, 0);
-									if (finished) dialog.finishTime(1000);
-								}, time, cards[i], i, i >= cards.length - 1);
-								time += 500;
+							
+							if (cards.length) {
+								var discards = [];
+								for (var i = 0; i < cards.length; i++) {
+									if (get.value(cards[i]) < 0) {
+										discards.push(cards[i]);
+									}
+								}
+								
+								if (discards.length) {
+									for (var i = 0; i < discards.length; i++) {
+										setTimeout(function(card, index, finished){
+											dialog.move(card, index, 0);
+											if (finished) dialog.finishTime(1000);
+										}, time, discards[i], i, i >= discards.length - 1);
+										time += 500;
+									}
+								} else {
+									dialog.finishTime(250);
+								}
+								
+							} else {
+								dialog.finishTime(250);
 							}
 						}
 						
@@ -979,7 +1002,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						"step 2"
 						game.cardsDiscard(event.cards1);
 						if (event.cards2) {
-							player.logSkill(event.name);
+							// player.logSkill(event.name);
 							player.gain(event.cards2, 'gain2', 'log');
 						}
 					},
@@ -989,7 +1012,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					trigger: {
 						global: 'cardsDiscardAfter'
 					},
-					direct: true,
+					// direct: true,
 					check: function(event, player) {
 						return event.cards[0].name != 'du';
 					},
@@ -1024,13 +1047,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						
 						event.switchToAuto = function(){
 							var cards = dialog.cards[0].concat();
-							cards = decadeUI.get.bestValueCards(cards, player);
-							
 							var time = 500;
 							for (var i = 0; i < cards.length; i++) {
+								if (get.value(cards[i], player) < 0) continue;
 								setTimeout(function(card, index, finished){
-									dialog.move(card, index, 0);
-									if (finished) dialog.finishTime(1000);
+									dialog.move(card, index, 1);
+									if (finished) dialog.finishTime(cards.length <= 1 ? 250 : 1000);;
 								}, time, cards[i], i, i >= cards.length - 1);
 								time += 500;
 							}
@@ -1049,7 +1071,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						"step 1"
 						game.cardsDiscard(event.cards1);
 						if (event.cards2) {
-							player.logSkill(event.name);
+							// player.logSkill(event.name);
 							player.gain(event.cards2, 'gain2', 'log');
 						}
 					}
@@ -1058,8 +1080,8 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		},
 	};
 	
-	var inheritSkill = {
-		xz_xunxun:{
+	decadeUI.inheritSkill = {
+		xz_xunxun: {
 			audio: 2,
 			trigger: {
 				player: 'phaseDrawBegin1'
@@ -1072,12 +1094,30 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			content: decadeUI.skill.xunxun.content,
 		},
-		reluoying: decadeUI.skill.luoying,
-		
-	}
-	
-	decadeUI.overrideSkill = {
-		nk_shekong:{
+		reluoying: {
+			subSkill: {
+				discard: {
+					audio: 'reluoying',
+					trigger: {
+						global: 'loseAfter'
+					},
+					filter: decadeUI.skill.luoying.subSkill.discard.filter,
+					// direct: true,
+					content: decadeUI.skill.luoying.subSkill.discard.content,
+				},
+				judge: {
+					audio: 'reluoying',
+					trigger: {
+						global: 'cardsDiscardAfter'
+					},
+					// direct: true,
+					check: decadeUI.skill.luoying.subSkill.judge.check,
+					filter: decadeUI.skill.luoying.subSkill.judge.filter,
+					content: decadeUI.skill.luoying.subSkill.judge.content,
+				}
+			}
+		},
+		nk_shekong: {
 			content:function(){
 				'step 0'
 				event.cardsx = cards.slice(0);
@@ -1127,6 +1167,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						
 						var next = player.getNext();
 						var friend = (get.attitude(player, next) < 0) ? null : next;
+						judges = next.node.judges.childNodes;
 						
 						if (judges.length > 0) cheats = decadeUI.get.cheatJudgeCards(cards, judges, friend != null);
 						
@@ -1134,7 +1175,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 							cards = decadeUI.get.bestValueCards(cards, friend);
 						} else {
 							cards.sort(function(a, b){
-								get.value(a, next) - get.value(b, next);
+								return get.value(a, next) - get.value(b, next);
 							});
 						}
 
@@ -1143,7 +1184,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						for (var i = 0; i < cards.length; i++) {
 							setTimeout(function(card, index, finished){
 								dialog.move(card, index, 0);
-								if (finished) dialog.finishTime(1000);
+								if (finished) dialog.finishTime(cards.length <= 1 ? 250 : 1000);;
 							}, time, cards[i], i, i >= cards.length - 1);
 							time += 500;
 						}
@@ -1161,11 +1202,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					}
 				} else event.finish();
 			}
-		}
-	}
-	
-	for (var skill in inheritSkill) {
-		decadeUI.skill[skill] = inheritSkill[skill];
+		},
 	}
 	
 	if (!_status.connectMode) {
@@ -1173,10 +1210,10 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			if (lib.skill[key]) lib.skill[key] = decadeUI.skill[key];
 		}
 		
-		for (var key in decadeUI.overrideSkill) {
+		for (var key in decadeUI.inheritSkill) {
 			if (lib.skill[key]) {
-				 for (var j in decadeUI.overrideSkill[key]) {
-					lib.skill[key][j] = decadeUI.overrideSkill[key][j]
+				 for (var j in decadeUI.inheritSkill[key]) {
+					lib.skill[key][j] = decadeUI.inheritSkill[key][j]
 				 }
 			}
 		}
@@ -1205,5 +1242,6 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			};
 		}
 	}
+	
 });
 

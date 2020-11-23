@@ -5,17 +5,22 @@ interface ExCommonConfig {
      * （一般必须要有，程序内检索就是通过这个名字检索的，但是扩展加载源码原因，不能有这些参数）
      */
     name?: string;
+    这个还是放在各自的文件中比较好
     /**
      * 是否联机
      * （目前只有card,character的扩展配置中用到，和name一样，在直接扩展加载extension中不要配置该项；
      * 联机的实现，目前参考别人的代码，凡在content,precontent中以独立包方式导入实现，否则需要源码级别修改）
+     * 
+     * 注2：像mode扩展之类，connect可以是配置；
      */
-    connect?: boolean;
+    connect?: boolean|SMap<SelectConfigData>;
     /** 
      * 翻译（本地化）
      * 该扩展使用的常量字符串
+     * 
+     *  注：用于game.addMode中时，translate是单字符串，表示当前mode的翻译，即lib.mode[xxxmode].name；
      */
-    translate: SMap<string>;
+    translate: SMap<string>|string;
     /** 
      * 帮助文本
      * 帮助内容将显示在菜单－选项－帮助中
@@ -224,6 +229,13 @@ interface ExtensionInfoConfigData extends ExCommonConfig {
     config: SMap<SelectConfigData>;
 
     /**
+     * 联机配置
+     * 
+     * 特殊接口：update
+     */
+    connect?: SMap<SelectConfigData>;
+
+    /**
      * 扩展的包信息
      * （主要是通过系统内部自带编译器编辑的代码，导入逻辑其实基本一致）
      */
@@ -246,6 +258,11 @@ interface ExtensionInfoConfigData extends ExCommonConfig {
     /** 删除该扩展后调用 */
     onremove(): void;
 
+    /**
+     * 【特殊】用于game.addMode添加时，
+     * 用于显示模式icon，所有的图片路径的imgsrc，指定外层扩展文件名；
+     */
+    extension?:string;
 
     //基本无用，一般配置直接在package中
     // /** 技能配置 */

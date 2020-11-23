@@ -1,1 +1,1 @@
-node F:\shenleiProject\Gitlab\noname-ts_program\game\server.js
+node .\game\server.js

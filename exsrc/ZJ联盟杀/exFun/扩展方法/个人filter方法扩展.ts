@@ -28,8 +28,27 @@ module ZJNGEx {
                 lib.filter.isNotSelf = function (player: Player, target: Player) {
                     return player != target;
                 }
-
                 
+                //zj杀定制lib.filter.characterDisabled/characterDisabledByZJSha2，排除zjsha以外的角色
+                lib.filter.characterDisabledByZJSha = lib.filter.characterDisabled;
+                lib.app.reWriteFunctionX(lib.filter,{
+                    characterDisabledByZJSha:[
+                        "if(lib.config.forbidai.contains(i)) return true;",
+                        `
+                        if(!get.is.characterByZJSha(i)) return true;`,
+                        NG.ReWriteFunctionType.append
+                    ],
+                });
+
+                lib.filter.characterDisabledByZJSha2 = lib.filter.characterDisabled2;
+                lib.app.reWriteFunctionX(lib.filter,{
+                    characterDisabledByZJSha2:[
+                        "if(info[4].contains('boss')) return true;",
+                        `
+                        if(!get.is.characterByZJSha(i)) return true;`,
+                        NG.ReWriteFunctionType.append
+                    ],
+                });
 
                 return null;
             });

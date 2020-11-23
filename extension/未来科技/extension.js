@@ -686,66 +686,66 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				content: function () {
 					player.markSkill('timedie');
 				},
-			},
-				lib.skill.timedie = {
-					init: function (player) {
-						if (!player.storage.timedie2) player.storage.timedie2 = 0;
-					},
-					intro: {
-						name: '复活倒计时',
-						content: function (storage) {
-							return '你在' + storage + '个角色死亡时复活';
-						},
-					},
-					marktext: "复",
-					mark: true,
-					trigger: {
-						global: 'dieBegin',
-					},
-					direct: true,
-					forceDie: true,
-					forced: true,
-					popup: false,
-					unique: true,
-					filter: function (event, player) {
-						return player.storage.timedie && event.player != player && player.isDead();
-						return false;
-					},
-					content: function () {
-						"step 0"
-						player.storage.timedie2++;
-						"step 1"
-						if (player.storage.timedie2 < player.storage.timedie) event.finish();
-						"step 2"
-						if (player.storage.alivenum < 0) player.revive(player.maxHp);
-						else player.revive(player.storage.alivenum);
-						if (player.storage.drawnum > 0) player.draw(player.storage.drawnum);
-						player.unmarkSkill('timedie');
-						delete player.storage.alivenum;
-						delete player.storage.drawnum;
-						delete player.storage.timedie;
+			};
+			lib.skill.timedie = {
+				init: function (player) {
+					if (!player.storage.timedie2) player.storage.timedie2 = 0;
+				},
+				intro: {
+					name: '复活倒计时',
+					content: function (storage) {
+						return '你在' + storage + '个角色死亡时复活';
 					},
 				},
-				//暂时死亡函数，无时机
-				lib.element.player.timedie = function (time, num, num2) {
+				marktext: "复",
+				mark: true,
+				trigger: {
+					global: 'dieBegin',
+				},
+				direct: true,
+				forceDie: true,
+				forced: true,
+				popup: false,
+				unique: true,
+				filter: function (event, player) {
+					return player.storage.timedie && event.player != player && player.isDead();
+					return false;
+				},
+				content: function () {
 					"step 0"
-					event.forceDie = true;
-					if (time < 0 || num < 0 || num2 < 0) return;
-					this.die();
+					player.storage.timedie2++;
 					"step 1"
-					if (typeof time != 'number') time = 1;
-					if (typeof num != 'number') num = -1;
-					if (typeof num2 != 'number') num = 0;
-					game.log(this, '将在' + get.cnNumber(time) + '名角色死亡后复活');
-					this.storage.timedie = time;
-					this.storage.alivenum = num;
-					this.storage.drawnum = num2;
-					this.syncStorage('timedie');
-					this.addSkill('timedie')
-					this.update();
+					if (player.storage.timedie2 < player.storage.timedie) event.finish();
+					"step 2"
+					if (player.storage.alivenum < 0) player.revive(player.maxHp);
+					else player.revive(player.storage.alivenum);
+					if (player.storage.drawnum > 0) player.draw(player.storage.drawnum);
+					player.unmarkSkill('timedie');
+					delete player.storage.alivenum;
+					delete player.storage.drawnum;
+					delete player.storage.timedie;
 				},
+			};
+			//暂时死亡函数，无时机
+			lib.element.player.timedie = function (time, num, num2) {
+				"step 0"
+				event.forceDie = true;
+				if (time < 0 || num < 0 || num2 < 0) return;
+				this.die();
+				"step 1"
+				if (typeof time != 'number') time = 1;
+				if (typeof num != 'number') num = -1;
+				if (typeof num2 != 'number') num = 0;
+				game.log(this, '将在' + get.cnNumber(time) + '名角色死亡后复活');
+				this.storage.timedie = time;
+				this.storage.alivenum = num;
+				this.storage.drawnum = num2;
+				this.syncStorage('timedie');
+				this.addSkill('timedie')
+				this.update();
+			};
 
-				//todo:因为这里的函数是在content方法中加载的，因此用我的扩展无法很好覆盖，故屏蔽直接使用我的
+			//todo:因为这里的函数是在content方法中加载的，因此用我的扩展无法很好覆盖，故屏蔽直接使用我的
 			// 	lib.element.content.useModSha = function () {
 			// 		"step 0"
 			// 		if (event.unequip) player.addSkill('unequip');
@@ -824,37 +824,37 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			// 	next.setContent("useModSha");
 			// }
 
-			lib.skill.KJmodSha_baseDamage = {
-				trigger: { player: 'useCard' },
-				filter: function (event) {
-					return event.card && event.card.name == 'sha';
-				},
-				forced: true,
-				popup: false,
-				unique: true,
-				direct: true,
-				superCharlotte: true,
-				charlotte: true,
-				content: function () {
-					if (!trigger.baseDamage) trigger.baseDamage = 1;
-					trigger.baseDamage += player.storage.KJmodSha_baseDamage;
-					//alert(trigger.baseDamage)
-				},
-			}
-			lib.skill.KJmodSha_extraDamage = {
-				audio: 2,
-				trigger: { player: 'shaBegin' },
-				forced: true,
-				popup: false,
-				unique: true,
-				direct: true,
-				superCharlotte: true,
-				charlotte: true,
-				content: function () {
-					if (typeof trigger.extraDamage != 'number') trigger.extraDamage = 0;
-					trigger.extraDamage += player.storage.KJmodSha_extraDamage;
-				},
-			}
+			// lib.skill.KJmodSha_baseDamage = {
+			// 	trigger: { player: 'useCard' },
+			// 	filter: function (event) {
+			// 		return event.card && event.card.name == 'sha';
+			// 	},
+			// 	forced: true,
+			// 	popup: false,
+			// 	unique: true,
+			// 	direct: true,
+			// 	superCharlotte: true,
+			// 	charlotte: true,
+			// 	content: function () {
+			// 		if (!trigger.baseDamage) trigger.baseDamage = 1;
+			// 		trigger.baseDamage += player.storage.KJmodSha_baseDamage;
+			// 		//alert(trigger.baseDamage)
+			// 	},
+			// }
+			// lib.skill.KJmodSha_extraDamage = {
+			// 	audio: 2,
+			// 	trigger: { player: 'shaBegin' },
+			// 	forced: true,
+			// 	popup: false,
+			// 	unique: true,
+			// 	direct: true,
+			// 	superCharlotte: true,
+			// 	charlotte: true,
+			// 	content: function () {
+			// 		if (typeof trigger.extraDamage != 'number') trigger.extraDamage = 0;
+			// 		trigger.extraDamage += player.storage.KJmodSha_extraDamage;
+			// 	},
+			// }
 
 			//技能次数
 

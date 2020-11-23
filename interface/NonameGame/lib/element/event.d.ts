@@ -29,9 +29,12 @@ declare namespace Lib.element {
         redo(): void;
         /**
          * 设置一个key到event里，用于保存，传递数据
-         * 设置进event的值，还会另外保存在_set集合中，用于缓存，set的数据（有可能也用于标记）
+         * 设置进event的值，还会另外保存在_set集合中，用于缓存，set的数据
+         * 
+         * 注：使用set设置的key，value，可以通过网络通信广播一起携带，直接附加在对象上的字段在广播时会被忽略；
          * @param key 若key不为字符串，且只有一个参数时，则执行批量set，即[[key,value],[key,value]....]
          * @param value 
+         * @returns 返回修改后的事件；
          */
         set(key: string | [string, any][], value?: any): Event;
         /**
@@ -147,6 +150,32 @@ declare namespace Lib.element {
          * 避免使用event.cancel导致后面的摸牌阶段结束时等时机直接无法生成的方案；
          */
         changeToZero():void;
+
+        /** 当前事件处于出牌阶段中 */
+        isPhaseUsing():boolean;
+
+        /**
+         * 获取玩家在事件过程中“失去过”的牌【v1.9.105】
+         * 
+         * 关于getl机制
+            由于无名杀没有正规的牌移动事件 因此在新版本中 使用getl机制进行拟合
+
+            例：孙尚香【枭姬】
+            //时机：单纯的“失去牌后”，牌被获得后，牌被人直接插进判定区后，牌被人拿进装备区后
+            trigger:{
+            player:'loseAfter',
+            global:['equipAfter','addJudgeAfter','gainAfter'],
+            },
+            frequent:true,
+            //通过getl函数 获取玩家在事件过程中“失去过”的牌，同时排除因其他事件导致的lose事件 避免二次发动技能
+            filter:function(event,player){
+                var evt=event.getl(player);
+                //只有获取的列表存在 并且有失去装备区的牌的记录 才能发动技能
+                return evt&&evt.player==player&&evt.es&&evt.es.length>0;
+            },
+         * @param player 
+         */
+        getl(player:Player):GameEvent;
     }
 
     //event的属性，不过大部分都是动态获取的
@@ -248,6 +277,9 @@ declare namespace Lib.element {
                 confirm:OneParmFun<boolean,void>
             }
         }
+
+        /** untrigger方法，记录指定某些特定玩家取消事件 */
+        _notrigger:Player[];
         
         _aiexclude:any;
         fakeforce:any;
@@ -328,7 +360,13 @@ declare namespace Lib.element {
         // skipShan:boolean;
 
         //【wuxie】相关使用属性：
-        /** 当前【wuxie】响应的目标，卡牌信息 */
+        /** 
+         * 当前【wuxie】响应的目标，卡牌信息 
+         * (补充：也是'useCard','respond'中响应的信息中携带属性，其本质为触发“chooseToRespond”携带的信息，
+         * 目前三国杀常规响应卡牌：wuxie，sha，shan，tao，jiu......，其他就是技能自身的响应) 
+         * 
+         * 其指指代：触发respond，响应的玩家：event.player，响应的卡牌：event.cards，respondTo[被响应的玩家，被响应的卡牌]；
+         */
         respondTo:[Player,CardBaseUIData];
 
         /** 
@@ -366,7 +404,11 @@ declare namespace Lib.element {
 
         /** 
          * 直接使用该结果的卡牌做为该事件需要的卡牌
-         * 使用范围：judge(一张牌)，gainPlayerCard，discardPlayerCard，chooseCard
+         * 使用范围：judge(一张牌)，gainPlayerCard，discardPlayerCard，chooseCard;
+         * 
+         * 注：常用，一般有些技能可以替代判定牌时，可以先检查event.directresult是否已经有值，
+         *  没值得情况下将判定牌设置该属性，可以默认使用该属性指定的卡牌作为判定牌；
+         * 注2：同时也会是xxxSubPlayer常用属性之一，暂时先不讨论；
          */
         directresult:Card|Card[];
 
@@ -390,6 +432,15 @@ declare namespace Lib.element {
          */
         fixedResult:NMap<any>;
 
+        /** 
+         * 【拼点】拼点的结果
+         * 
+         * 该结果默认为当前拼点的输赢；
+         * 一般设置：set('preserve','lose'/'win')，
+         * 实际用于设置期望结果，不会直接参与逻辑
+         */
+        preserve:boolean|OneParmFun<PingDianResultData,boolean>;
+
         /**
          * 给事件添加filterStop函数,用于判断某个时机是否停止发动该时机未发动的技能
          * 
@@ -397,6 +448,12 @@ declare namespace Lib.element {
          * 【v1.9.102】
          */
         filterStop:NoneParmFum<boolean>;
+
+        /**
+         * 在一个judge判定事件中，如果是因为卡牌导致的，则可以通过event.cardname判断卡牌名称
+         * 【v1.9.105】
+         */
+        cardname:string;
 
         /** 缓存事件调用时用的参数（后续广播出去需要的核心数据之一） */
         _args:any[];

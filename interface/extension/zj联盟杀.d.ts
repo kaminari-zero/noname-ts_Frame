@@ -33,6 +33,14 @@ interface Get {
     cardEnableRespondableFilter(exCard?: TwoParmFun<Card, Player, boolean> | CardBaseUIData): TwoParmFun<Card, Player, boolean>;
 }
 
+interface Is {
+    /**
+     * 判断角色是ZJ联盟杀
+     * @param name 
+     */
+    characterByZJSha(name:string):boolean;
+}
+
 declare namespace Lib.element {
     interface Content {
         chooseToRespondByAll(...args):void;
@@ -205,6 +213,20 @@ declare namespace Lib {
          * @param card 
          */
         filterMingzhiCard(player:Player,card:Card):boolean;
+
+        /**
+         * 判断当前武将是否不能使用（增加排除zjsha以外）
+         * 该方法有 双将情况下的禁用
+         * @param i 武将名
+         * @param libCharacter 
+         */
+        characterDisabledByZJSha(i: string, libCharacter?: any): boolean;
+        /**
+         * 判断当前武将是否不能使用2（增加排除zjsha以外）
+         * 该方法，有额外：boss，hiddenboss，minskin，lib.characterFilter判定
+         * @param i 武将名
+         */
+        characterDisabledByZJSha2(i: string): boolean;
     }
 }
 

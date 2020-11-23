@@ -4,6 +4,8 @@ module ZJNGEx {
 
             function (lib: Lib, game: Game, ui: UI, get: Get, ai: AI, _status: Status) {
 
+
+                //黄华富旧技能
                 let zj_ganglie = {
                     name:"肛裂",
                     // description:"当你受到1点伤害后，你可以进行一次判定，若判定结果为黑色牌，你选择一项：(1)令其弃置两张手牌；(2)你对其造成的1点伤害。",
@@ -131,6 +133,7 @@ module ZJNGEx {
                 //     //2.动态添加一个跳过阶段的技能
                 // };
 
+                //杨爵波旧技能
                 let zj_laobo={
                     name:"捞波",
                     description:"阶段技，你可以将任意数量的手牌交给任意角色(至少1张)，你摸X张牌且血量+1，若其获得你给出的牌张数不小于2，你可以视为对你使用一张【血】或【魔】(X为你已损失的血量)。",
@@ -228,6 +231,7 @@ module ZJNGEx {
                     }
                 };
 
+                //杨爵波 新技能
                 let new_zj_laobo={
                     name:"捞波",
                     description:NG.Utils.translateDescTxt("【阶段技】 [自]将≥1张[手]交给[他]，[自][摸]X (X=[自]失血值)，其获得给出的牌张数≥2，[自]视为对[任]使用一张《血》。"),
@@ -316,6 +320,7 @@ module ZJNGEx {
                     }
                 };
 
+                //郑博森旧技能
                 //博森【被动技】 [自]除去1点血量后，[任][摸]3；[自]死亡时，[自]所有[区]交给[他]，然后令其血量+1。
                 let zj_bosen:ExSkillData={
                     name: "博森",

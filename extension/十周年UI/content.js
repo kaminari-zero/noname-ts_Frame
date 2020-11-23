@@ -88,14 +88,13 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 								aIndex = aIndex >= 0 ? aIndex : guanXing.orderCardsList[i].length;
 								bIndex = bIndex >= 0 ? bIndex : guanXing.orderCardsList[i].length;
 								return aIndex - bIndex;
-								return 
 							});
 						}
 						
 						y = 'calc(' + (i * 100) + '% + ' + (i * 10) + 'px)';
 						for (var j = 0; j < cards.length; j++) {
 							x = 'calc(' + (j * 100) + '% + ' + (j * 10) + 'px)';
-							cards[j].style.cssText += ';transform:translate(' + x + ', ' + y + '); z-index:' + (i * 10 + j) + ';';
+							cards[j].style.cssText += ';transform:translate(' + x + ', ' + y + '); z-index:' + (i * 10 + j + 1) + ';';
 						}
 					}
 				},
@@ -462,6 +461,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					}
 					
 					cards[j].rawCssText = cards[j].style.cssText;
+					cards[j].fix();
 					content.appendChild(cards[j]);
 				}
 			}

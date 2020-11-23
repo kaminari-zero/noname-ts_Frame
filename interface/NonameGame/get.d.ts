@@ -37,7 +37,8 @@ interface Get {
      * 若指定视为牌，有autoViewAs，则返回重新整合后的视为牌（既强制自动变成该视为牌）;
      * 非autoViewAs，
      *  若对象有isCard为true,或者是一个真实卡牌，则返回带isCard=true，的卡牌结构信息；
-     *  否则则返回card对象的副本；
+     *  若不是，只是信息对象，无cards参数,否则则返回带cards的card对象的副本；
+     *  都不是，则按原来输出；
      * @param card 指定视为牌
      * @param cards 待操作的卡牌集合，一般是指真实使用的卡牌,取值为false时，卡牌有autoViewAs，则返回不携带的cards的card;
      */
@@ -455,7 +456,7 @@ interface Get {
     card(original?:boolean):Card;
     /**
      * 获取当前event的玩家player
-     * 返回_status.event.player （算是个无用的方法）
+     * 返回_status.event.player 
      */
     player():Player;
     /**
@@ -769,12 +770,24 @@ interface Get {
      * 
      * 检测牌/技能对目标角色的效果值
      * (比较重要的方法，由于代码过多，骚后研究)
+     * 
+     * 用于获取直接收益，例：比如说加目标 桃子全场多开就完事了；
      * @param target 目标
      * @param card 技能/卡牌
      * @param player 默认指当前事件中的玩家
      * @param player2 视角，一般填target/player，例如我方杀敌方满血『曹丕』,对我方来说是负效果,但对敌方是正效果,视角决定效果的正负。
      */
-    effect(target:Target,card:string|NameType,player:Player,player2:Viewer):number;
+    effect(target:Target,card:string|NameType,player:Player,player2:Viewer,isLink?:boolean):number;
+    /**
+     * 【常用】效果值检测2(v1.9.105)
+     * 
+     * 用于获取直接收益，例：需要考虑【桃】的存留等问题
+     * @param target 目标
+     * @param card 技能/卡牌
+     * @param player 默认指当前事件中的玩家
+     * @param player2 视角，一般填target/player，例如我方杀敌方满血『曹丕』,对我方来说是负效果,但对敌方是正效果,视角决定效果的正负。
+     */
+    effect_use(target:Target,card:string|NameType,player:Player,player2:Viewer,isLink?:boolean):number;
     /**
      * 【常用】检测伤害效果
      * 
@@ -809,12 +822,25 @@ interface Get {
     buttonValue(button:Button):number;
 }
 
+//由玩法模式自己扩展实现的方法接口：
+interface Get {
+    /**
+     * 【AI】玩法模式下的态度值检测
+     * 
+     * 作用：get.attitude内；
+     * 注：当前该方法没做健壮性处理，为必须实现；
+     * @param from 
+     * @param to 
+     */
+    rawAttitude(from?:Player,to?:Player):number;
+}
+
 /**
  * 一些条件判断
  */
 interface Is {
     /**
-     * 是否时转化后的卡牌
+     * 判断是非转化牌，包括“视为使用”的虚拟牌
      * 
      * 返回true则是；
      */

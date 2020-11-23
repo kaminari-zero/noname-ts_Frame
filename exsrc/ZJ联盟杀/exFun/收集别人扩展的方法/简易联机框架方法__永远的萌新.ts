@@ -1,7 +1,7 @@
 //@ts-nocheck
 module ZJNGEx {
     (function () {
-        NG.Utils.importCurContent(this.ZJNGEx, "简易联机框架方法", NG.ImportFumType.none,
+        NG.Utils.importCurContent(this.ZJNGEx, "简易联机框架方法", NG.ImportFumType.run,
 
             //看了下 “永远的萌新”大佬的简易联机框架，非常之好，整合进这里(暂时不需要，先收集在这里)
             //扩展中文名的英文名方法

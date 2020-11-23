@@ -297,7 +297,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					var evt=evt2.getParent();
 					var next=game.createEvent('caochuan_gain');
 					_status.event.next.remove(next);
-					evt.after.push(next);
+					evt.after.unshift(next);
 					next.player=player;
 					next.setContent(function(){
 						var cards=event.getParent().cards.filterInD();
@@ -319,11 +319,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				filterTarget:lib.filter.notMe,
 				selectTarget:1,
 				toself:false,
-				onEquip:function(){
-					var cards=player.getCards('e',function(cardz){
-						return cardz!=card;
-					});
-					if(cards.length) player.discard(cards);
+				loseThrow:true,
+				customSwap:function(){
+					return true;
 				},
 				ai:{
 					order:9,
@@ -467,9 +465,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					if(player.sex!='male') return;
 					var next=game.createEvent('nvzhuang_lose');
 					event.next.remove(next);
-					event.getParent().after.push(next);
+					var evt=event.getParent();
+					if(evt.getlx===false) evt=evt.getParent();
+					evt.after.push(next);
 					next.player=player;
-					next.card=card;
 					next.setContent(function(){
 						if(player.countCards('he')){
 							player.popup('nvzhuang');
@@ -591,7 +590,13 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						keepAI:true,
-						target:function(player,target){
+						target:function(player,target,cardx){
+							if(_status.jinhe&&_status.jinhe[cardx.cardid]) return -0.5-2*target.countCards('h');
+							var card=target.getEquip(5);
+							if(!card) return 0;
+							return -get.value(card,target);
+						},
+						target_use:function(player,target){
 							return -0.5-2*target.countCards('h');
 						},
 					},
@@ -600,25 +605,31 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 		},
 		skill:{
 			jinhe_lose:{
-				trigger:{player:'loseEnd'},
+				trigger:{
+					player:['loseAfter','equipAfter'],
+				},
 				equipSkill:true,
 				forced:true,
 				filter:function(event,player){
-					if(event.type!='discard'||!_status.jinhe||event.getParent(2).name=='jinhe_skill'&&event.getParent(2).player==player) return false;
-					for(var i=0;i<event.es.length;i++){
-						if(event.es[i].name=='jinhe'&&_status.jinhe[event.es[i].cardid]) return true;
+					if(event.getl===false) return false;
+					if(event.name=='lose'&&event.position!=ui.discardPile||!_status.jinhe||event.getParent(2).name=='jinhe_skill'&&event.getParent(2).player==player) return false;
+					var evt=event.getl(player);
+					if(!evt) return false;
+					for(var i=0;i<evt.es.length;i++){
+						if(evt.es[i].name=='jinhe'&&_status.jinhe[evt.es[i].cardid]) return true;
 					}
 					return false;
 				},
 				content:function(){
 					"step 0"
-					for(var i=0;i<trigger.es.length;i++){
-						if(trigger.es[i].name=='jinhe'&&_status.jinhe[trigger.es[i].cardid]){
-							var card=_status.jinhe[trigger.es[i].cardid].card;
+					var es=trigger.getl(player).es;
+					for(var i=0;i<es.length;i++){
+						if(es[i].name=='jinhe'&&_status.jinhe[es[i].cardid]){
+							var card=_status.jinhe[es[i].cardid].card;
 							game.cardsDiscard(card);
 							player.$throw(card);
 							game.log(card,'进入了弃牌堆');
-							delete _status.jinhe[trigger.es[i].cardid];
+							delete _status.jinhe[es[i].cardid];
 						};
 					}
 					game.broadcastAll(function(jinhe){

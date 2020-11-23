@@ -85,26 +85,32 @@ declare namespace NG {
         /** 魏(水) */
         WEI = "wei",
         /** 水 */
-        WATER = "wei",
+        WATER = "WATER",
+        // WATER = "wei",
         /** 蜀（火） */
         SHU = "shu",
         /** 火 */
-        FIRE = "shu",
+        FIRE = "FIRE",
+        // FIRE = "shu",
         /** 吴（木） */
         WU = "wu",
         /** 木 */
-        WOOD = "wu",
+        WOOD = "WOOD",
+        // WOOD = "wu",
         /** 群（土） */
         QUN = "qun",
         /** 土 */
-        SOIL = "qun",
+        SOIL = "SOIL",
+        // SOIL = "qun",
         /** 神（金） */
-        SHEN = "shen", //懒得关神选势力的选项，这些势力，后面可能都改
+        SHEN = "shen", //懒得关神选势力的选项，这些势力，后面可能都改（新版：以进行独立属性处理，不再对神选势力进行干涉）
         // SHEN = "shen",
         /** 金 */
-        GOLD = "shen",
+        GOLD = "GOLD",
+        // GOLD = "shen",
         /** 无属性 */
-        NONE = "western",
+        NONE = "NONE",
+        // NONE = "western",
         /** 西方 */
         WESTERN = "western",
         /** 大佬的key */
@@ -306,7 +312,10 @@ declare namespace NG {
         /** 受到伤害时3:受到伤害时,可以改变伤害大小 */
         damageBegin3 = "damageBegin3",
         /** 受到伤害时4:受到伤害时,不可以改变伤害大小 */
-        damageBegin4 = "damageBegin4"
+        damageBegin4 = "damageBegin4",
+
+        /** 收到伤害，并且有伤害来源，常用于source:"damageSource",即你造成有来源的伤害 */
+        damageSource = "damageSource",
     }
 
     /**
@@ -754,6 +763,11 @@ declare namespace NG {
          * 使用范围：gain
          */
         bySelf = "bySelf",
+
+
+        //之定义玩法模式扩展名：
+        /** ZJ联盟杀扩展前缀 */
+        ZJShaConst = "ZJ联盟杀",
     }
 
     /**
@@ -824,6 +838,10 @@ declare namespace NG {
         versus = "versus",
         /** 斗地主 */
         chess = "chess",
+
+        //自己定义的模式：
+        /** zj联盟杀 */
+        ZJSha_identity = "ZJSha_identity",
     }
 
     /** 
@@ -1176,5 +1194,13 @@ declare namespace NG {
         /** 该lose事件是否时"丢弃discard" */
         discard = "discard",
         // damage = "damage",
+    }
+
+    /** 重写方法的类型：(默认没有类型则是替换指定部分) */
+    export const enum ReWriteFunctionType {
+        /** 目标追加到指定后面 */
+        append = "append",
+        /** 目标插入到指定前面 */
+        insert = "insert",
     }
 }

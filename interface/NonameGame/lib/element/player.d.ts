@@ -116,9 +116,9 @@ declare namespace Lib.element {
         uninit(): Player;
 
 
-        /** 获取offsetLeft（元素左侧距离参照元素左边界偏移量） */
+        /** 【UI】获取offsetLeft（元素左侧距离参照元素左边界偏移量） */
         getLeft(): number;
-        /** 获取offsetTop（元素上方距离参照元素上边界偏移量） */
+        /** 【UI】获取offsetTop（元素上方距离参照元素上边界偏移量） */
         getTop(): number;
         /** 【动画】化生 */
         smoothAvatar(vice: any, video: any): any;
@@ -867,7 +867,7 @@ declare namespace Lib.element {
          * 获得牌
          * 
          * 参数列表：
-         *  itemtype为“player”类型：设置next.source，即获得牌的源头；
+         *  itemtype为“player”类型：设置next.source，即获得牌的源头(注：获得者为next.player自身)；
          *  itemtype为“card”，“cards”类型：设置next.cards，即获得的牌；
          *  itemtype为bool类型：设置next.delay，应该是动画延迟；
          *  itemtype为字符串：设置next.animate，设置动画；
@@ -1200,17 +1200,17 @@ declare namespace Lib.element {
          */
         canUse(card: string|{name:string}, target: Player, distance?: boolean, includecard?: boolean): boolean;
         /**
-         * 检测是否有可称为该card的目标
+         * 检测是否有该card的使用目标
          * @param card 卡牌名（也是用于canUse）
          * @param distance 用于canUse，参考canUse的distance参数
          * @param includecard 用于canUse，参考canUse的includecard参数
          */
         hasUseTarget(card: string|{name:string}, distance?: boolean, includecard?: boolean): boolean;
         /**
-         * 获取使用卡牌的最小数值？（应该是ai使用）
+         * 获取该卡牌可对至少x目标使用的数量
          * @param card 
-         * @param distance 
-         * @param includecard 
+         * @param distance 用于canUse，参考canUse的distance参数
+         * @param includecard 用于canUse，参考canUse的distance参数
          */
         getUseValue(card: string | { name: string }, distance?: boolean, includecard?: boolean): number;
 
@@ -1576,7 +1576,7 @@ declare namespace Lib.element {
          * 【AI】判断是否有指定的技能标签(ai相关)
          * @param tag 技能标签
          * @param hidden 若为true，获取技能附带隐藏技能hiddenSkills
-         * @param arg 要检测的技能标签对应的结果，可以是字符串/bool值；
+         * @param arg 要检测的技能标签对应的结果，可以是字符串/bool值，也可以是任意值，用于ai的skillTagFilter的功能参数；
          * @param globalskill 是否检测全局技能
          */
         hasSkillTag(tag: string, hidden?: boolean, arg?: any, globalskill?: boolean): boolean;
@@ -1716,7 +1716,6 @@ declare namespace Lib.element {
         //【v1.9.98.3】
         trySkillAnimate(name,popname,checkShow):void;
         tryCardAnimate(card,name,nature,popname):void;
-        
 
         //动画,UI相关的方法（前置$符）
         $drawAuto(cards: any, target: any): any;
@@ -1752,7 +1751,7 @@ declare namespace Lib.element {
         $damage(source: any): any;
         $die(): any;
         $dieflip(type: any): any;
-        $phaseJudge(card: any): any;
+        $phaseJudge(card: any): any;        
     }
 
     //核心成员属性（暂时先暂时一部分比较核心常用的）
@@ -1929,11 +1928,27 @@ declare namespace Lib.element {
         /** 不进入濒死阶段，询问求助 */
         nodying:boolean;
 
+        /** equip事件，step 2，正在装备中...... */
+        equiping:boolean;
+
         // link:Player,
         
         //【1.9.98】
         /** 记录游戏中事件的使用记录 */
         actionHistory:ActionHistoryData[];
+
+        //【1.9.105】
+        /**
+         * 当前控制权
+         * 
+         * 直接将一名角色的_trueMe赋值给另一名角色 即可实现控制权的夺取；
+         * 注1：实际代码实现，有写细节需求，后续，继续参考 例：神貂蝉【惑心】；
+         * 注2：另外此写法不支持联机模式（还没去确定）；
+         */
+        _trueMe:Player;
+
+        /** 是否跳过当前回合的标记（目前没用到，一般在翻面后，会被设为true） */
+        phaseSkipped:boolean;
         
         //ai相关
         /**
@@ -1957,6 +1972,33 @@ declare namespace Lib.element {
         playerid:number;
         /** 玩家的昵称，客机的ws.nickname就是nickname */
         nickname:string;
+    }
+
+    //由玩法模式自己扩展实现的方法接口：
+    interface Player {
+        /**
+         * 【动画】死亡后
+         * 
+         * 作用：$die，reinit时，玩家时dead死亡状态；
+         */
+        $dieAfter():void;
+        /**
+         * 自定义死亡后操作
+         * 
+         * 作用：die事件，步骤“step 1”，单独处理改方法[该阶段，未触发“die”事件，血量变成变成小于等于0状态]；
+         * @param source 
+         */
+        dieAfter(source:Source):void;
+        /**
+         * 自定义死亡后操作2
+         * 
+         * 作用：die事件，步骤“step 4”，单独处理改方法[该阶段，已经触发“die”事件，玩家已经确定死亡，失去技能，弃置所有牌]；
+         * @param source 
+         */
+        dieAfter2(source:Source):void;
+        /** ai日志，要自己实现 */
+        logAi(targets:Target[],card:Card):void;
+        logAi(expose:number):void;
     }
 }
 
@@ -2039,6 +2081,16 @@ type PlayerAIInfo = {
     shown:number;
     /** 标记身份（并非真实身份） */
     identity_mark:string;
+
+    //扩展方法接口：
+    //下面连个，都是作用与get.attitude中
+    modAttitudeFrom(from?:Player,to?:Player,att?:number):number;
+    modAttitudeTo(from?:Player,to?:Player,att?:number):number;
+
+    /**
+     * 作用：player.getState，设置state.mode；
+     */
+    getModeState():any;
 }
 
 /**

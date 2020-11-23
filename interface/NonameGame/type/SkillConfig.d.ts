@@ -122,7 +122,8 @@ interface ExSkillData {
     /** 
      * 此技能是否可以被设置为自动发动2 
      * 可以细分当前技能强制发动选项，（应该是为了细分子技能），保存到lib.config.autoskilllist，
-     * 在ui.click.autoskill2中执行
+     * 在ui.click.autoskill2中执行,
+     * 取值为子技能的名字（注：目前，看来，只是在UI上作用，自动发动，更多是依赖frequent参数）
      */
     subfrequent?: string[];
     /**
@@ -130,9 +131,9 @@ interface ExSkillData {
      * 可以影响技能触发响应时间（主要影响loop之间的时间,即game.delayx的调用情况）
      */
     autodelay?: boolean | number | TwoParmFun<Trigger, Player, number>;
-    /** 第一时刻执行？ */
+    /** 第一时刻执行？（将发动顺序前置到列表前） */
     firstDo?:boolean;
-    /** 最后一刻做？ */
+    /** 最后一刻做？（将发动顺序置于列表后方） */
     lastDo?:boolean;
 
     /** 
@@ -324,7 +325,7 @@ interface ExSkillData {
      * 是否可以被“封印”（内置技能“fengyin”）的技能，取值为false时，get.is.locked返回为false；true则正常逻辑 
      */
     locked?: boolean;
-    /** 是否是旧版技能，值为true，添加到lib.config.vintageSkills中，可以实现新/旧版技能切换 */
+    /** 是否是旧版技能，值为true，添加到lib.config.vintageSkills中，可以实现新/旧版技能切换，如果该为true，则“原翻译名_alter”即作为当前的翻译 */
     alter?: boolean;
 
 
@@ -618,7 +619,7 @@ interface ExSkillData {
      * 指向线的颜色枚举：
      * fire（橙红色FF9244），thunder（浅蓝色8DD8FF），green（青色8DFFD8），
      */
-    line?: string;
+    line?: string|{color:number[]};
     /** 是否显示多条指引线 */
     multiline?: boolean;
 
@@ -799,8 +800,16 @@ interface ExSkillData {
     /** 一次性技能，在resetSkills时，直接移除该技能 */
     vanish?: boolean;
 
-    /** 作用不明，并没有什么用，在clearSkills中使用 */
+    /** 
+     * 武将特有固有技能
+     * 
+     * 从逻辑上来看，比固定技优先级还高，不会受“fengyin”，“baiban”等技能移除；
+     * 在clearSkills时，如果不是“删除所有的all为true”的情况下，不会被移除；
+     * 不会被，“化生”之类的技能获得，删除；
+     */
     charlotte?: boolean;
+    /** 在clearSkills中使用,标记此标记，永远不会被该方法删除，该标记独立使用，一般其他方法没有对其进行处理 */
+    superCharlotte? :boolean;
     /** 作用不明，并没有什么用，与ui相关，在skillintro中使用,值为true */
     gainable?: boolean;
     /** 在nodeintro中使用，添加classname:thundertext,值为true */
@@ -856,28 +865,7 @@ interface ExSkillData {
     //AI相关
     /** ai的详细配置 */
     ai?: ExAIData;
-    // /**
-    //  * 第一个参数好想有些不一样：event，card,子技能button
-    //  * 
-    //  * （目前只发现技能使用的是以上两种形式）
-    //  * @param arg 
-    //  */
-    // check?(...arg): number|boolean;
-    // /** 
-    //  * ai如何选牌
-    //  * 
-    //  * 在ai.basic.chooseCard中使用
-    //  */
-    // check?(card:Card): number|boolean;
-    // /**
-    //  * 告诉ai是否发动这个技能
-    //  * 返回true则发动此技能
-    //  * 
-    //  * 在触发createTrigger中使用
-    //  * @param event 
-    //  * @param player 
-    //  */
-    // check?(event:GameEvent, player:Player): number|boolean;
+    
     /**
      * ai用于检测的方法：
      * 
@@ -1100,6 +1088,9 @@ interface ExModData {
     /** 改变卡牌伤害属性   用于get.nature*/
     cardnature?(card: Card, player: Player): string;
 
+    /** 对特定角色使用牌的次数限制【v1.9.105】 */
+    cardUsableTarget?(card: Card, player: Player, target: Target):boolean;
+
     //希望扩展：
     //是否能成为技能的目标
 }
@@ -1171,6 +1162,20 @@ interface ChooseButtonConfigData {
      * @param player 
      */
     prompt?(links: Links, player: Player): string;
+
+    /**
+     * 进行额外的选择时：
+     * 【v1.9.105】
+     * 
+     * 在chooseButton类出牌阶段技能中调用chooseControl函数而不是chooseButton函数进行第一段选择
+     * 
+     * 注1：使用参考  例：神户小鸟【花绽】；
+     * 注2：生成中所有选项，记得加上cancel2！
+     * 注3：其选择结果在：result.control
+     * @param event 
+     * @param player 
+     */
+    chooseControl?(event: GameEvent, player: Player):string[];
 }
 
 /** 时机的配置信息 */

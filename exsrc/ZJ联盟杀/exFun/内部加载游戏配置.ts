@@ -42,6 +42,46 @@ module ZJNGEx {
                         // }
                         data.config.extension_boss_enable=false;//默认关闭诸神降临：
                         data.config.extension_未来科技_KJfiel = true;
+                        
+                        //目前，界面美化扩展 ，和十周年直接有冲突，和蜀汉中兴UI有点冲突 (即如果配置了界面美化，优先使用界面美化)
+                        let loadExtensionConfig = window.loadExtensionConfig||lib.config.loadExtensionConfig;
+                        if(Array.isArray(loadExtensionConfig)) {
+                            //若有十周年的话：
+                            if(loadExtensionConfig.contains("界面美化")) {
+                                // 避免，下次更新该扩展启动因为缓存读取不了启动：
+                                data.config.extension_界面美化_enable = true;
+                                game.putDB('config', "extension_界面美化_enable", true);
+                                lib.config["extension_界面美化_enable"] = true;
+                                // delete data.config.extensions["extension_十周年UI"];
+                                // loadExtensionConfig.remove("十周年UI"); //目前这样并不能阻止加载，只能默认关闭一下扩展，或者直接不把该扩展加入读取的扩展列表里；
+                                if(loadExtensionConfig.contains("十周年UI")) {
+                                    data.config.extension_十周年UI_enable = false; //为了应对忘记把十周年干掉的情况下；
+                                    game.putDB('config', "extension_十周年UI_enable", false);
+                                    lib.config["extension_十周年UI_enable"] = false;
+                                }
+                                if(loadExtensionConfig.contains("蜀汉中兴简化版")) {   
+                                    // 这样并不能在第一次的时候关闭扩展，目前扩展的加载顺序导致一些覆盖提前并没有什么用
+                                    // 目前最简单的解决方式，先改扩展的默认； 
+                                    data.config.extension_蜀汉中兴简化版_changeDialog = false;
+                                    // 目前解决方案：强制执行，即使标记过已经加载过，也强行重写到配置里：
+                                    game.putDB('config', "extension_蜀汉中兴简化版_changeDialog", false);
+                                    lib.config["extension_蜀汉中兴简化版_changeDialog"] = false;
+                                } else if(loadExtensionConfig.contains("十周年UI")) {
+                                }
+                            } else {
+                                if(loadExtensionConfig.contains("十周年UI")) {
+                                    data.config.extension_十周年UI_enable = true; //为了应对忘记把十周年干掉的情况下；
+                                    game.putDB('config', "extension_十周年UI_enable", true);
+                                    lib.config["extension_十周年UI_enable"] = true;
+                                }
+                                if(loadExtensionConfig.contains("蜀汉中兴简化版")) {   
+                                    data.config.extension_蜀汉中兴简化版_changeDialog = true;
+                                    game.putDB('config', "extension_蜀汉中兴简化版_changeDialog", true);
+                                    lib.config["extension_蜀汉中兴简化版_changeDialog"] = true;
+                                }
+                            }
+                        }
+
                         //尽量只加载一次：
                         var noname_default_load_inited = localStorage.getItem(lib.configprefix + 'default_load_inited');
                         if(!noname_default_load_inited) {

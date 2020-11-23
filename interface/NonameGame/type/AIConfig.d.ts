@@ -144,7 +144,12 @@ interface ExAIData {
     noTurnover?:boolean;
 
     //【v1.9.102】
-    /** 用于观看其他角色的手牌 */
+    /** 
+     * 用于观看其他角色的手牌
+     * 
+     * 令其他角色的手牌对自己可见；
+     * 只需令自己拥有viewHandcard的技能标签即可，通过调整skillTagFilter即可实现对特定角色的手牌可见；
+     */
     viewHandcard?:boolean;
 
     //ai基础属性值
@@ -210,6 +215,25 @@ interface ExAIData {
             game.log(player,'对',target,'发动【测试】的eff是',ai.get.effect(target,'测试',player,player));
             game.log(player,'对',target,'使用【杀】的eff是',ai.get.effect(target,{name:'sha'},player,player));
         },
+
+        永远的萌新大佬的示例：
+        effect的返回值：
+            effect有3种可能的返回值,1个数字，长度为2的数组，长度为4的数组。
+            1个数字n:收益*n
+            长度为2的数组[a,b]:a*收益+b
+            长度为4的数组[a,b,c,d]:对目标为a*收益+b，对使用者为c*收益+d
+            *注意 zeroplayertarget 实际上是[0,0,0,0]  zerotarget  实际上是[0,0]
+            "下面以target:function(){},别人对你使用杀为例，括号里为可能的技能描述"
+                return -1;//负影响(杀对你造成伤害时改为等量回复)
+                return 0;//无影响(杀对你无效)
+                return 2;//2倍影响(杀对你的伤害翻倍)
+                return 0.5;//一半影响(杀对你的伤害减半)
+                return [1,1];//正常影响+1(成为杀的目标摸一张牌)
+                return [1,-1];//正常影响-1(成为杀的目标弃一张牌)
+                return [0,1];//无影响+1(杀对你造成伤害时改为摸一张牌);
+                return [0,-1];//无影响-1(杀对你造成伤害时改为弃一张牌)
+                return [1,0,0,-1];//对你正常影响，对使用者无影响-1(刚烈)
+                return [1,1,1,1];//对双方正常影响+1(你成为杀的目标时你和使用者各摸一张牌)
      */
     effect?: {
         /** 
@@ -243,16 +267,20 @@ interface ExAIData {
          * 注：写了这个就不用写player(player){}了，因为player可以在这里进行判断
          */
         target?:ThreeParmFun<Player,Target,Card,number>|number;
+        target_use?:ThreeParmFun<Player,Target,Card,number>|number;
         /**
          * ai是否发动此技能（对玩家（自身）的收益）：
          * 返回正，发动，否则不发动
          */
         player?:ThreeParmFun<Player,Target,Card,number>|number;
+        player_use?:ThreeParmFun<Player,Target,Card,number>|number;
+
+        keepAI?:boolean,
     }
     /**
      * 技能标签的生效限制条件
      * 
-     * 视为技中使用，ai什么时候可以发动视为技
+     * 例：视为技中使用，ai什么时候可以发动视为技（决定某些技能标签的true/false）
      * 在player.hasSkillTag,player.hasGlobalTag中使用
      */
     skillTagFilter?(player:Player,tag:string,arg:any): boolean;

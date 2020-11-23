@@ -48,7 +48,7 @@
 	opacity: 0;
 }
 
-.equips-zone>.equips>div{
+.equips-zone>.equips>div {
 	left: 3px;
 	right: 3px;
 	height: 27px;
@@ -61,6 +61,7 @@
 	align-items: center;
 	align-content: center;
 	justify-content: center;
+	z-index: 1;
 }
 
 .equips-zone>.equips>div::before {
@@ -138,6 +139,16 @@
 	top: 123px;
 }
 
+.equips-zone>.equips-back>div>.icon,
+.equips-zone>.equips>div>.icon {
+	display: block;
+	top: 4px;
+	left: 2px;
+	width: 20px;
+	height: 20px;
+	transition: opacity 0.5s;
+}
+
 .equips-zone>.equips>.card>div {
 	text-shadow: none;
 	position: absolute;
@@ -186,8 +197,8 @@
 	left: 3px;
     top: 3px;
     bottom: 3px;
-	width: 21px;
-    height: calc(100% - 6px);
+	width: 20px;
+    height: 20px;
     position: absolute;
 	visibility: visible !important;
 	z-index: 2;

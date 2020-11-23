@@ -9,8 +9,6 @@ namespace NG {
         var ALERT_DEBUG = false;
         export var version = "";//在外面赋值
 
-        /** 大佬的更新地址 */
-        // export var updateUrl = "";
 
         /** 添加format方法 */
         Date.prototype.format = function (format) {

@@ -41,37 +41,42 @@ module ZJNGEx {
 
                 //额外增加一个mod扩展杀的功能，其余参数可以和usecard一致；
                 //简化使用参数：目标，该sha的真实使用cards，扩展mod
+                //重写版本：
                 lib.element.player.useModSha = function (...X) {
                     var next = game.createEvent('useModSha', false);
                     var card = { name: "sha" };
                     next._args = X.concat();//先保存一份参数的原案
                     //当前，所有X参数，都是player.useCard的参数
+                    /*
+                    * usecard的参数列表，正常情况下的参数就是usecard+mod参数：
+                    *  itemtype为“cards”：设置next.cards，是指所使用的card;
+                    *  itemtype为“card”/拥有name属性的object：设置next.card，设置使用的卡牌，若为视为使用该卡牌，此时cards就是视为使用该卡牌的时所使用的卡牌；
+                    *  itemtype为“players”/“player”：设置next.targets，设置目标;
+                    *  string类型：
+                    *      特殊的string类型：
+                    *          "noai"：设置next.noai为true;
+                    *          "nowuxie"：设置next.nowuxie为true，既可不被无懈;
+                    *      否则，设置next.skill；
+                    *  boolean类型：设置next.addCount，是否计入使用，若为false，则不会缓存进player.stat(从而不计入使用次数)；
+                    * */
                     for (var i = 0; i < X.length; i++) {
-                        //原版
-                        if (get.itemtype(X[i]) == 'card') { //若有card，则优先使用参数的，否则，默认
-                            //alert(1)
+                        // 若有指定card对象，或者{name:}属性的结构，则当前使用card则默认为该配置；
+                        // 否则，则使用默认{ name: "sha" }；
+                        // 是使用card，则为cards；
+                        if (get.itemtype(X[i]) == 'card' || (get.itemtype(X[i]) == 'object' && X[i].name)) { 
                             var dinged = true;
                         }
-                        // else if (typeof X[i] == 'object' && X[i] && X[i].name && get.itemtype(X[i]) !== 'player' && get.itemtype(X[i]) !== 'players') {
-                        //     var dinged = true;
-                        //     //alert(2)
-                        // }
+                        
+                        // 当前为纯map对象，即为mod参数：
                         else if(get.itemtype(X[i]) == 'object') {
                             var mod = X[i];
                             X.remove(X[i]);
                         }
-                        // else {
-                        //     if (typeof X[i] === 'object' && X[i].mod) {//???
-                        //         var mod = X[i];
-                        //         X.remove(X[i]);
-                        //     }
-                        // }
+                        
                     }
-                    if (!dinged) X.push(card);
-                    //alert(mod)
+                    
                     if (mod) {
                         for (var i in mod) {
-                            //alert(i)
                             switch (i) {
                                 case 'unequip'://无视防具
                                     next.unequip = true;
@@ -114,12 +119,21 @@ module ZJNGEx {
                                     card.nature = mod[i];
                                     break;
 
+                                case 'isCard':// 是否视为使用xxxx（默认不为转化sha）
+                                    card.isCard = mod[i];
+                                    break;
+
                                 //自由扩展杀得功能：
                                 case 'func'://自由扩展杀得功能
                                     next.func = mod[i];
                                     break;
                             }
                         }
+                    }
+
+                    if (!dinged) {
+                        //自己判断，是否设置
+                        X.push(card);//若没有，则默认为上面的card
                     }
                     next.arg = X;
                     next.player = this;
@@ -141,7 +155,6 @@ module ZJNGEx {
                     content: function () {
                         if (!trigger.baseDamage) trigger.baseDamage = 1;
                         trigger.baseDamage += player.storage.KJmodSha_baseDamage;
-                        //alert(trigger.baseDamage)
                     },
                 }
 

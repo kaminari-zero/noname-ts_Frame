@@ -37,6 +37,15 @@ module ZJNGEx {
                     return "";
                 }
 
+                //判断角色是ZJ联盟杀：
+                get.is.characterByZJSha = function (name: string) {
+                    let info = get.character(name) as HeroData;
+                    if (info && info[HeroDataFields.exInfo].indexOf(ZJNGEx.ZJShaGameConst.ZJShaFlag) > -1) {
+                        return true;
+                    }
+                    return false;
+                }
+
                 //获得当前处理中得按钮得下标
                 get.buttonIndex = function (button: Button, dialog?: Dialog) {
                     if (!dialog) dialog = _status.event.dialog;

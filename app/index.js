@@ -131,8 +131,7 @@
             var printErrorLog = printLogFun[1];
 
             //请自行替换地址
-			var site_g='https://nakamurayuri.coding.net/p/noname/d/noname/git/raw';
-			//var site_g='https://gitee.com/null_778/noname_source/raw/';
+			var site_g='https://gitee.com/null_778/noname_source/raw/';
             //var site_g='https://raw.githubusercontent.com/libccy/noname/';
             var site_c='https://nakamurayuri.coding.net/p/noname/d/noname/git/raw/';
 			//var site_c='https://gitee.com/null_778/noname_source/raw/';

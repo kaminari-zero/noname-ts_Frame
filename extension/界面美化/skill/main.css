@@ -1,0 +1,108 @@
+.skill-control {
+  max-width: 160px;
+  bottom: 16px;
+  right: 136px;
+}
+.skill-control div {
+  position: relative;
+}
+.skill-control .skillitem {
+  float: right;
+  white-space: nowrap;
+  font-family: 'HYZLSJ';
+  color: #F5D78E;
+  text-shadow: #F5D78E 0 0 1px,
+    black 0 0 2px,
+    black 0 0 2px,
+    black 0 0 2px, 
+    black 0 0 2px,
+    black 0 0 2px,
+    black 0 0 2px;
+  font-size: 18px;
+}
+.skill-control > div {
+  display: block;
+}
+.skill-control > div::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.skill-control > .enable {
+  margin: 0 0 0 auto;
+}
+
+.skill-control > .trigger > .skillitem {
+  margin: 5px 2px;
+}
+.skill-control > .enable > .skillitem {
+  --w: 80px;
+  --h: calc(var(--w) * 85 / 175);
+  width: var(--w);
+  height: var(--h);
+  line-height: var(--h);
+  text-align: center;
+  background-image: url("./images/btn.png");
+  background-size: 100% 100%;
+}
+.skill-control > .enable > .skillitem.select {
+  background-image: url("./images/btn2.png");
+}
+.skill-control > .enable > .skillitem:not(.usable):not(.select) {
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+}
+
+#handcards1 {
+  --lessw: 0px;
+}
+#arena:not(.single-handcard):not(.chess).cxy-new-ui[data-sclevel="0"] > #me > #handcards1 {
+  width: calc(100% - 180px - var(--lessw)) !important;
+}
+#arena:not(.single-handcard):not(.chess).cxy-new-ui[data-sclevel="1"] > #me > #handcards1 {
+  width: calc(100% - 220px - var(--lessw)) !important;
+}
+#arena:not(.single-handcard):not(.chess).cxy-new-ui[data-sclevel="2"] > #me > #handcards1 {
+  width: calc(100% - 260px - var(--lessw)) !important;
+}
+#arena:not(.single-handcard):not(.chess).cxy-new-ui[data-sclevel="3"] > #me > #handcards1 {
+  width: calc(100% - 300px - var(--lessw)) !important;
+}
+#arena:not(.single-handcard):not(.chess).cxy-new-ui[data-sclevel="4"] > #me > #handcards1 {
+  width: calc(100% - 340px - var(--lessw)) !important;
+}
+
+.xplayer > .skillMarks {
+  --w: 34px;
+  top: 30px;
+  right: -8px;
+  width: var(--w);
+  z-index: 5;
+}
+.skillMarks > .skillMarkItem {
+  --h: calc(var(--w) * 0.5);
+  width: var(--w);
+  height: var(--h);
+  line-height: var(--h);
+  text-align: center;
+  display: block;
+  position: relative;
+  white-space: nowrap;
+  border-radius: var(--h);
+  font-family: 'HYZLSJ';
+  font-size: 14px;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, .6);
+}
+.skillMarkItem.xiandingji {
+  background-image: linear-gradient(#ff7800, rgba(255, 119, 0, 0.514));
+}
+.skillMarkItem.juexingji {
+  background-image: linear-gradient(#4e758c, rgba(79, 118, 140, 0.514));
+}
+.skillMarkItem.xiandingji.used {
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+}
+.skillMarkItem + .skillMarkItem {
+  margin-top: 8px;
+}

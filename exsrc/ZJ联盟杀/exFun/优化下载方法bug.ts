@@ -58,7 +58,7 @@ module ZJNGEx {
                             request.addListener('error', function (e) {
                                 isGetError = true;
                             });
-                            request.addListener('close', function () {
+                            request.addListener('close', function () { //优化：添加失败可重试次数
                                 if (isGetError) {
                                     if (count_1 >= 7) {
                                         if (onerror)

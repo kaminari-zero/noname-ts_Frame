@@ -1,0 +1,32 @@
+/* 用于技能和身份的字体 */
+@font-face {
+  font-family: 'HYZLSJ';
+  src: url("./fonts/HYZLSJ.TTF");
+}
+/* 用于武将字体 */
+@font-face {
+  font-family: 'WDZLFT';
+  src: url("./fonts/WDZLFT.TTF");
+}
+@font-face {
+  font-family: 'FZLBJW';
+  src: url("./fonts/FZLBJW.TTF");
+}
+/* 用于角色弹框标题的字体 */
+@font-face {
+  font-family: 'ATLL';
+  src: url("./fonts/ATLL.OTF");
+}
+
+.menu-container > .menu.main.cxy-import-dialog {
+  top: 50% !important;
+  left: 50% !important;
+  width: 420px;
+  height: 130px;
+  padding: 15px;
+  transform: translate(-50%, -50%);
+}
+.menu.main.cxy-import-dialog > .caption {
+  padding-top: 0;
+  padding-bottom: 8px;
+}

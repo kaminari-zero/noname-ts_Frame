@@ -64,6 +64,7 @@ module ZJNGEx {
                             player.chooseToDiscard(1,{color:NG.CardColor.Black},"你可弃置一张黑色牌，令其摸一张牌");
                         }
                         "step 3"
+                        if(!result.bool) return;
                         if(event.color == NG.CardColor.Red){
                             trigger.player.recover(player,NG.StringTypeConst.nocard);
                         } else if(event.color == NG.CardColor.Black) {

@@ -546,6 +546,11 @@
 	overflow: visible;
 }
 
+.player>.marks>div:before,
+.player>.marks>div:after {
+	visibility: hidden;
+}
+
 .player>.marks>div>.suit-num,
 .player>.marks>div>.background:not(*:empty),
 .player>.marks>div>.background.skillmark:not(*:empty) {
@@ -663,7 +668,7 @@
     height: 100%;
     background: rgb(240, 220, 160);
 	transition: none;
-    transform: rotate(45deg) translateZ(0);
+    transform: rotate(45deg);
     border-radius: 4px;
     box-shadow: 0 0 1px rgba(0,0,0,0.4), 0 0 8px rgba(0,0,0,0.8);
     z-index: -1;
@@ -796,6 +801,7 @@
     background-position: center;
     z-index: 88;
     transform: none;
+	transition: none;
 }
 
 .player>.identity[data-color='rYe'] {

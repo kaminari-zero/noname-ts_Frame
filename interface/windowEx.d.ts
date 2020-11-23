@@ -38,6 +38,12 @@ declare interface Window extends INodeJsData {
     /** 流程测试 */
     testLog(type:number, name:string,...args):void;
 
+    /** 正式扩展加载配置 */
+    loadExtensionConfig:string[];
+
+    /** 个人扩展加载配置 */
+    loadSelfExtensionConfig:string[];
+
     /** ZJ联盟杀扩展 */
     ZJNGEx;
 }

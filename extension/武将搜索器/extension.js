@@ -1,10 +1,11 @@
-game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武将搜索器",editable:false,content:function (config,pack){
+game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武将卡牌搜索器",editable:false,content:function (config,pack){
 	game.tujianBegin = function(dialog, close ,val,manual) {
 	var Image=ui.background.style.backgroundImage;
-	ui.background.setBackgroundImage("extension/武将搜索器/相爱相杀.png");
+	var list=['相爱相杀','picture'].randomGet();
+	ui.background.setBackgroundImage("extension/武将卡牌搜索器/"+list+".png");
 		var result = val; 
 		if (result == "" || result == null) {             
-		 result = "你没有输入武将名称"; 
+		 result = "你没有输入名称"; 
 		 alert(result);  
 		 close.parentNode.remove();
 			//_status.paused = false;
@@ -22,32 +23,22 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 		}
 		//这里必须是从后往前删除
 		}
+		var back=false;
 		var value = false;
 		var name = [];
 		for (var a in lib.character) {
 	//		if (lib.translate[a] == result) {     (这是精确搜索)
 	//改为模糊搜索:
 	if (lib.translate[a]&&lib.translate[a].indexOf(result)!=-1) {
-				name.add(a);
+				name.push(a);
 				value = true;
 			}
 		} //寻找武将
 		if (value == false || name.length == 0) {
-			alert('找不到名为' + result + '的武将!');
-			//_status.paused = false;
-			manual.remove();
-			close.parentNode.remove();
-			ui.arena.show();
-			ui.system.show();
-			ui.menuContainer.show();
-			ui.background.style.backgroundImage=Image;
-			return;
+			//alert('找不到名为' + result + '的武将!');
+	  back=true;
 		}
 		//进一步
-		//game.pause();
-		//_status.paused = true;
-		//window.alert('搜索成功');		
-		//dialog.addSmall([name, 'character']);	
 		for (var le = 0; le < name.length; le++) {
 		dialog.addSmall([[name[le]], 'character']);	
 			var str = '';
@@ -55,13 +46,17 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 			if (!character) {
 				continue;
 			} else {
-				var allcharacter = lib.config.all.characters;
+				//var allcharacter = lib.config.all.characters;
+				var allcharacter=lib.characterPack;
+				//{武将包1,武将包2}
 				var Packname;
-				for (var b = 0; b < allcharacter.length; b++) {
-					var characterPack = lib.characterPack[allcharacter[b]];
-					for (var c in characterPack) {
-						if (c == name[le]) {
-							Packname = lib.translate[allcharacter[b] + '_character_config'];
+	    for(var b in allcharacter){
+					for (var c in allcharacter[b]) {					
+						if ( JSON.stringify(lib.character[c]) == JSON.stringify(character)){
+						//alert(true)
+						//&&characterPack[c]==character) {
+						//alert(lib.translate[lib.characterPack[b] ]+"，"+lib.translate[lib.characterPack[b] + '_character_config'])
+							Packname = lib.translate[ b + '_character_config'];
 							break;
 						}
 					}
@@ -77,6 +72,58 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 			}
 			dialog.addText('<div><div id="Cdetail" style="display:block; left:auto; text-align:left; ">' + str);
 		}
+		var back2=false;
+		value = false;
+	 name = [];
+		for (var a in lib.card) {
+	//		if (lib.translate[a] == result) {     (这是精确搜索)
+	//改为模糊搜索:
+	if (lib.translate[a]&&lib.translate[a].indexOf(result)!=-1) {
+				name.add(a);
+				value = true;
+			}
+		} //寻找卡牌
+		if (value == false || name.length == 0) {
+			//alert('找不到名为' + result + '的卡牌!');
+		 back2=true;
+		}
+		//进一步
+		for (var le = 0; le < name.length; le++) {
+		dialog.addSmall([[name[le]], 'vcard']);	
+			var str = '';
+			var card = lib.card[name[le]];
+			if (!card) {
+				continue;
+			} else {
+			//	var allcard = lib.config.all.cards.concat(['mode_derivation','mode_banned']);
+			var allcard = lib.cardPack;
+			/*if(lib.cardPack.mode_banned!=undefined){
+			allcard=allcard.concat('mode_banned');
+			}*/
+				var Packname;
+				for (var b in allcard) {
+					var cardPack = lib.cardPack[ b ];
+			for (var c = 0; c < cardPack.length; c++) {
+						if (cardPack[c] == name[le] ) {						 
+							Packname = lib.translate[ b + '_card_config'];
+							break;
+						}
+					}
+				}
+				//suit number name nature
+				str += '<br><span class="bluetext">卡牌名称</span> ：' + lib.translate[name[le]] +  '<br><span class="bluetext">卡牌类别</span> ：' + lib.translate[lib.card[name[le]].type] +  '<br><span class="bluetext">卡牌效果</span>：' + lib.translate[name[le]+'_info'] + '<br><span class="bluetext">所在卡牌包</span>：' + Packname;
+			 if(lib.card[name[le]].derivation){str += '<br><span class="bluetext">卡牌来源</span> ：' + lib.translate[lib.card[name[le]].derivation]}
+			 str+='<br><br><br>';
+			}
+			dialog.addText('<div><div id="Cdetail" style="display:block; left:auto; text-align:left; ">' + str);
+		}
+		if(back==true&&back2==true){
+		alert('没有符合条件的武将或卡牌!');
+			var nodes=dialog.content.childNodes;
+		for(var i=nodes.length-1;i>=0;i--){
+		dialog.content.removeChild(nodes[i]);
+		}
+		}
 	};
 	
 	window.诗笺_manual = {
@@ -85,10 +132,20 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 			var manual = ui.create.div('.manual', manual);
 			var menu = ui.create.div('.menu', manual);
 			var input = menu.appendChild(document.createElement('input'));
+			input.onkeydown=function(e){
+			if(e&&e.keyCode==13){
+			game.tujianBegin(content , close , input.value , manual);
+			input.value="";
+			}
+			};
 			var search = ui.create.div('.search', menu);
 			var close = ui.create.div('.close', menu);
+			var oldDialog=_status.event.dialog;
+			var dialog=ui.create.dialog();
+			dialog.noImage=true;
+			dialog.style.backgroundImage="";
 			
-			var content = manual.appendChild(ui.create.dialog());	
+			var content = manual.appendChild(dialog);	
 			content.classList.remove('nobutton');
 			content.classList.add('content');
 			content.style.transform = '';
@@ -98,7 +155,8 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 			search.innerHTML = '搜索';
 			search.addEventListener('click', function(){
 				// alert(input.value); 	 input.value 是输入框里的内容
-				game.tujianBegin(content, close,input.value,manual);
+				game.tujianBegin(content , close , input.value , manual);
+				input.value="";
 			});
 			
 			close.innerHTML = '关闭';
@@ -107,8 +165,10 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 				manual.remove();
 				ui.arena.show();
 				ui.system.show();
-				ui.menuContainer.show();			
+				//ui.menuContainer.show();			
 				ui.background.style.backgroundImage=Image;
+				_status.event.dialog=oldDialog;
+				_status.event.dialog.show();
 			});
 			
 			//_status.paused = true;
@@ -121,16 +181,17 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"武�
 	};
 	
 },precontent:function (){
- var layoutPath = lib.assetURL + 'extension/武将搜索器';
+ var layoutPath = lib.assetURL + 'extension/武将卡牌搜索器';
 	lib.init.css(layoutPath, 'extension');
+
 },help:{},config:{
-manual:{
-		name: '武将图鉴(点我点我)',
-		clear: true,
-		onclick:function(){
-			诗笺_manual.show();	   
-		},
-	},
+"manual":{
+"name":"点击此处进行搜索",
+"clear":true,
+onclick:function(){
+window.诗笺_manual.show();
+},
+}
 },package:{
     character:{
         character:{

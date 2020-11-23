@@ -1,0 +1,20 @@
+.animateCanvas {
+  position: absolute;
+  z-index: 1000;
+}
+
+.player.xplayer .damageadded {
+  font-family: 'HYZLSJ';
+  font-size: 24px;
+  z-index: 1001;
+}
+.player.xplayer .damageadded[data-nature="skill"] {
+  color: #F5D78E;
+  text-shadow: #F5D78E 0 0 1px,
+    black 0 0 2px,
+    black 0 0 2px,
+    black 0 0 2px, 
+    black 0 0 2px,
+    black 0 0 2px,
+    black 0 0 2px;
+}

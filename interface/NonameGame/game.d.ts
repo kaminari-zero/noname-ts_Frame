@@ -38,16 +38,6 @@ interface Game extends IDownLoadFun {
      */
     cardsGotoOrdering(cards:Card|Card[]):GameEvent;
 
-    //【联机】相关属性
-    /**
-     * 是否在线
-     * 
-     * 主机，只有在联机房间时才是true,一旦创建房间后就是false，包括游戏中；
-     * 客机，只要是联机模式都保持true；
-     */
-    online:boolean;
-    onlineID:string;
-    onlineKey:string;
 
     /**
      * 显示历史信息UI
@@ -261,7 +251,8 @@ interface Game extends IDownLoadFun {
     alert(str:string):void;
     /** 需要打印的信息（打印的信息在 菜单->其他->命令 中打印） */
     print(...args):void;
-
+    
+    /** 动画相关 */
     animate:Animate;
 
 
@@ -290,8 +281,13 @@ interface Game extends IDownLoadFun {
     addCardPack(pack,packagename):void;
     /** 添加技能 */
     addSkill(name:string,info:ExSkillData,translate:string,description:string):void;
-    /** 添加玩法mode */
-    addMode(name:string,info:any,info2:any):void;
+    /**
+     * 添加玩法mode
+     * @param name mode的name
+     * @param info mode扩展内容
+     * @param info2 mode的config扩展内容
+     */
+    addMode(name:string,info:ExModeConfigData,info2:ExtensionInfoConfigData):void;
 
     /**
      * 添加全局技能
@@ -358,7 +354,7 @@ interface Game extends IDownLoadFun {
      */
     pause():void;
     /**
-     * 暂停游戏循环2（ui相关）
+     * 暂停游戏循环2（联机模式下无效）
      */
     pause2():void;
     /** 
@@ -367,7 +363,7 @@ interface Game extends IDownLoadFun {
      */
     resume():void;
      /** 
-      * 游戏继续2
+      * 游戏继续2（联机模式下无效）
       * 设置pause2为false，重新loop
       */
     resume2():void;
@@ -693,7 +689,10 @@ interface Game extends IDownLoadFun {
      */
     getGlobalHistory():GlobalHistoryData;
     getGlobalHistory(key?:keyof GlobalHistoryData,filter?:OneParmFun<GameEvent,boolean>):GameEvent[];
+}
 
+//核心成员属性：
+interface Game {
     /** 正在游戏中的玩家 */
     players:Player[];
     /** 死亡玩家 */
@@ -716,6 +715,115 @@ interface Game extends IDownLoadFun {
     
     /** 服务器 */
     ws:WebSocket;
+
+    //【联机】相关属性
+    /**
+     * 是否在线
+     * 
+     * 主机，只有在联机房间时才是true,一旦创建房间后就是false，包括游戏中；
+     * 客机，只要是联机模式都保持true；
+     */
+    online:boolean;
+    onlineID:string;
+    onlineKey:string;
+    ip:string;
+    roomId:number;
+}
+
+//由玩法模式自己扩展实现的方法接口：
+interface Game {
+    /**
+     * 【联机】获取场上playerOL的状态信息；
+     * 
+     * 用于：1.服务器发送“reinit”信息；2.同步场上的游戏的状态，例如game.syncState;
+     */
+    getState():any;
+    /**
+     * 获取指定玩家可用身份列表
+     * 
+     * 用于：ui.click.identity;
+     */
+    getIdentityList(player:Player):SMap<string>;
+    /**
+     * 用于在特定模式下，重置身份列表的对应的名字
+     * 
+     * 用于：ui.click.identity;
+     */
+    getIdentityList2(list:SMap<string>):void;
+    /**
+     * 【联机】更新state
+     * 
+     * 一般，处理更新来自getState中的信息；
+     */
+    updateState(state:any):void;
+    /**
+     * 【联机】显示房间信息
+     * 
+     * 用于：ui.click.roomInfo，打开显示相关的房间信息；
+     */
+    getRoomInfo(div:HTMLDivElement):void;
+    /** 获取录像命，用于录像，需要重写这个，才会保留录像 */
+    getVideoName():[string,string];
+    /** 分数结算，用于game.over */
+    addRecord(resultbool:boolean):void;
+    /** 显示身份 */
+    showIdentity(me:Player):void;
+    /**
+     * 【联机】检查最终结果
+     * 
+     * 用于：game.over
+     * @param players 所有玩家：包括活着，死亡；
+     */
+    checkOnlineResult(players:Player[]):boolean;
+    /** 选择角色 */
+    chooseCharacter():void;
+    /** 【联机】选择角色 */
+    chooseCharacterOL():void;
+    
+    /**
+     * 自定义回合抽牌操作
+     * 
+     * 作用：phaseDraw事件触发，在步骤“step 2”中，优先使用该方法；
+     * @param player 
+     * @param num 
+     */
+    modPhaseDraw(player:Player,num:number):void;
+    /**
+     * 在chooseToUse/chooseToRespond/chooseToDiscard中，自定义交换玩家操作模式
+     * 
+     * 作用：
+     * 1.chooseToUse/chooseToRespond/chooseToDiscard事件触发，在步骤“step 0”中，非自动，在自己操作面板区域中时，可触发；
+     * 2.在game.swapPlayerAuto中，优先使用该自定义方法；
+     * @param player 
+     */
+    modeSwapPlayer(player:Player):void;
+
+    /**
+     * 点击暂停游戏时的处理方法
+     * 
+     * 作用：在ui.click.pause中使用
+     */
+    onpause():void;
+    /**
+     * 点击继续游戏时的处理方法
+     * 
+     * 作用：在ui.click.onresume中使用
+     */
+    onresume():void;
+
+    /** 自定义洗牌方法 */
+    onwash():string;
+    /** 自定义game.over游戏结束时的处理方法 */
+    onover():string;
+
+    /** 自定义金币显示接口 */
+    changeCoin(num:number):void;
+
+    /** 暂时不明白有什么用，boss,stone玩法有设置到这值，该值为true时，die死亡时，不清除mark标记 */
+    reserveDead:boolean;
+
+    /** 强制指定启用当行手牌显示？ */
+    singleHandcard:boolean;
 }
 
 /**

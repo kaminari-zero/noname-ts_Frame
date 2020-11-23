@@ -1,0 +1,156 @@
+.lbtn-controls {
+  --width: 46px;
+  left: 4px;
+  bottom: 8px;
+  width: var(--width);
+  z-index: 2;
+}
+#arena:not(.single-handcard):not(.chess).cxy-new-ui > .lbtn-controls ~  #mebg,
+#arena:not(.single-handcard):not(.chess).cxy-new-ui > .lbtn-controls ~ #me {
+  left: 40px !important;
+}
+.lbtn-controls ~ #me #handcards1 {
+  --lessw: 40px;
+}
+
+.lbtn-controls > div {
+  display: block;
+  position: relative;
+}
+.lbtn-control {
+  width: var(--width);
+  height: var(--width);
+  background-image: url("./images/btn-bg.png");
+  background-size: 100% 100%;
+  line-height: var(--width);
+  text-align: center;
+  white-space: nowrap;
+  color: #F5D78E;
+  font-family: 'HYZLSJ';
+  border-radius: 10px;
+}
+.lbtn-control + .lbtn-control {
+  margin-top: 4px;
+}
+
+.lbtn-confirm:not(.closing).removing {
+  opacity: 1 !important;
+}
+.control {
+  --height: 40px;
+  width: auto !important;
+  background: transparent;
+  box-shadow: none;
+  line-height: normal;
+  padding: 0;
+}
+.control > div {
+  --h: var(--height);
+  --p: calc(var(--h) * 25 / 54);
+  height: var(--h);
+  background-image: url("./images/confirm-bg-c.png");
+  background-size: calc(100% - 2 * var(--p)) 100%;
+  line-height: var(--h);
+  text-align: center;
+  padding: 0 var(--p);
+  color: #F5D78E;
+  font-family: 'HYZLSJ';
+  font-size: 20px;
+  border-radius: 4px;
+  overflow: visible;
+  transition: none;
+}
+.control > div.primary {
+  --p: calc(var(--h) * 11 / 75);
+  background-image: url("./images/confirm-bg-2-c.png");
+}
+.control > div + div {
+  margin-left: 15px;
+}
+.control > div::before,
+.control > div::after {
+  content: '';
+  top: 0;
+  width: var(--p);
+  height: var(--h);
+  position: absolute;
+  background-size: 100% 100%;
+  z-index: 0;
+}
+.control > div::before {
+  left: 0;
+  background-image: url("./images/confirm-bg-l.png");
+}
+.control > div.primary::before {
+  background-image: url("./images/confirm-bg-2-l.png");
+}
+.control > div::after {
+  right: 0;
+  background-image: url("./images/confirm-bg-r.png");
+}
+.control > div.primary::after {
+  background-image: url("./images/confirm-bg-2-r.png");
+}
+
+.control > div.disabled:not([data-type="endButton"]) {
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+}
+.control > div > span {
+  --sh: calc(var(--h) - 6px);
+  display: block;
+  height: var(--sh);
+  line-height: var(--sh);
+  margin: 3px auto;
+  background-image: url("./images/btn.png");
+  padding: 0 30px;
+  background-size: 100% 100%;
+  position: relative;
+}
+.lbtn-confirm[data-skill] > [data-type="skill2"] {
+  display: none;
+}
+
+.cardRoundNumber {
+  top: 16px;
+  left: 16px;
+  font-family: 'HYZLSJ';
+  text-shadow: black 1px 1px 1px,
+    black 1px -1px 1px,
+    black -1px 1px 1px,
+    black -1px -1px 1px;
+}
+.cardRoundNumber > .cardPileNumber {
+  --w: 26px;
+  --h: calc(var(--w) * 173 / 127);
+  width: var(--w);
+  height: var(--h);
+  background-image: url("./images/cardback.png");
+  background-size: 100% 100%;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .65);
+  position: relative;
+}
+.cardRoundNumber > .cardPileNumber > span {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  display: block;
+  position: absolute;
+  line-height: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.cardRoundNumber > .roundNumber,
+.cardRoundNumber > .time {
+  left: 38px;
+  bottom: 16px;
+  height: 16px;
+  line-height: 16px;
+  white-space: nowrap;
+  color: #F5D78E;
+}
+.cardRoundNumber > .time {
+  bottom: 0;
+  color: #fff;
+}

@@ -530,6 +530,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 			},
 			checkResult:function(){
+				var me=game.me._trueMe||game.me;
 				if(_status.brawl&&_status.brawl.checkResult){
 					_status.brawl.checkResult();
 					return;
@@ -587,9 +588,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							game.showIdentity();
 							game.over('游戏平局');
 						}
-						else if(winner2.contains(game.me)){
+						else if(winner2.contains(me)){
 							game.showIdentity();
-							if(loser2.contains(game.me)) game.over(false);
+							if(loser2.contains(me)) game.over(false);
 							else game.over(true);
 						}
 						else{
@@ -601,14 +602,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 				if(!game.zhu){
 					if(get.population('fan')==0){
-						switch(game.me.identity){
+						switch(me.identity){
 							case 'fan':game.over(false);break;
 							case 'zhong':game.over(true);break;
 							default:game.over();break;
 						}
 					}
 					else if(get.population('zhong')==0){
-						switch(game.me.identity){
+						switch(me.identity){
 							case 'fan':game.over(true);break;
 							case 'zhong':game.over(false);break;
 							default:game.over();break;
@@ -621,7 +622,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.zhong.identity='zhong';
 				}
 				game.showIdentity();
-				if(game.me.identity=='zhu'||game.me.identity=='zhong'||game.me.identity=='mingzhong'){
+				if(me.identity=='zhu'||me.identity=='zhong'||me.identity=='mingzhong'){
 					if(game.zhu.classList.contains('dead')){
 						game.over(false);
 					}
@@ -629,8 +630,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.over(true);
 					}
 				}
-				else if(game.me.identity=='nei'){
-					if(game.players.length==1&&game.me.isAlive()){
+				else if(me.identity=='nei'){
+					if(game.players.length==1&&me.isAlive()){
 						game.over(true);
 					}
 					else{
@@ -1079,7 +1080,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							list.remove('shen');
 							if(list.length) player.group=function(){
 							 if(_status.mode!='zhong'&&game.zhu&&game.zhu.group){
-							  if(['re_zhangjiao','liubei','re_liubei','caocao','re_caocao','sunquan','re_sunquan','zhangjiao','sp_zhangjiao','caopi','re_caopi','liuchen','caorui','sunliang','sunxiu','sunce','re_sunben','ol_liushan','re_liushan','key_akane'].contains(game.zhu.name)) return game.zhu.group;
+							  if(['re_zhangjiao','liubei','re_liubei','caocao','re_caocao','sunquan','re_sunquan','zhangjiao','sp_zhangjiao','caopi','re_caopi','liuchen','caorui','sunliang','sunxiu','sunce','re_sunben','ol_liushan','re_liushan','key_akane','dongzhuo','re_dongzhuo','ol_dongzhuo'].contains(game.zhu.name)) return game.zhu.group;
 							  if(game.zhu.name=='sunhao'&&player.identity=='zhong') return 'wu';
 							  if(game.zhu.name=='yl_yuanshu'){
 							   if(player.identity=='zhong') list.remove('qun');
@@ -1411,6 +1412,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							list3.push(i);
 						}
 					}
+					list2.sort(lib.sort.character);
 					event.list.randomSort();
 					_status.characterlist=event.list.slice(0);
 					list3.randomSort();
@@ -1892,7 +1894,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					},game.zhu,game.zhu.name,game.zhu.name2,game.players.length>4);
 					
-					if(get.config('choose_group') && game.zhu.group=='shen'){
+					if(game.zhu.group=='shen'){
 						var list=['wei','shu','wu','qun','key'];
 						for(var i=0;i<list.length;i++){
 							if(!lib.group.contains(list[i])) list[i].splice(i--,1);
@@ -1969,7 +1971,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						if(lib.character[result[i][0]]&&lib.character[result[i][0]][1]=='shen') shen.push(lib.playerOL[i]);
 					}
 					event.result2=result;
-					if(get.config('choose_group')&&shen.length){
+					if(shen.length){
 						var list=['wei','shu','wu','qun','key'];
 						for(var i=0;i<list.length;i++){
 							if(!lib.group.contains(list[i])) list[i].splice(i--,1);
@@ -2422,12 +2424,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 				if(_status.mode=='purple'){
 					var real=get.realAttitude(from,to);
-					if(from==to||to.identityShown||(_status.yeconfirm&&['rYe','bYe'].contains(to.identity)&&['rYe','bYe'].contains(to.identity))) return real*1.1;
+					if(from==to||to.identityShown||from.storage.zhibi&&from.storage.zhibi.contains(to)||(_status.yeconfirm&&['rYe','bYe'].contains(to.identity)&&['rYe','bYe'].contains(to.identity))) return real*1.1;
 					return ((to.ai.shown+0.1)*real+(from.identity.slice(0,1)==to.identity.slice(0,1)?3:-3)*(1-to.ai.shown))
 				}
 				var difficulty=0;
 				if(to==game.me) difficulty=2-get.difficulty();
-				if(from==to||to.identityShown||(from.storage.dongcha==to)){
+				if(from==to||to.identityShown||(from.storage.dongcha==to)||to.identityShown||from.storage.zhibi&&from.storage.zhibi.contains(to)){
 					return get.realAttitude(from,to)+difficulty*1.5;
 				}
 				else{
@@ -2740,7 +2742,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					"step 0"
 					if(player.isUnderControl()){
-						game.modeSwapPlayer(player);
+						game.swapPlayerAuto(player);
 					}
 					var num=3;
 					var cards=get.cards(num);

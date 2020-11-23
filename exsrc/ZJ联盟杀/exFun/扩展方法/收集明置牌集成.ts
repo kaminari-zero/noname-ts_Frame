@@ -8,457 +8,618 @@ module ZJNGEx {
                 //明置相关，算是一个大系统：
                 //content:
                 //明置特供方法
-                lib.element.content.choosePlayerCardByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
-                    "step 0"
-                    if (!event.dialog) event.dialog = ui.create.dialog('hidden');
-                    else if (!event.isMine) {
-                        event.dialog.style.display = 'none';
-                    }
-                    if (event.prompt) {
-                        event.dialog.add(event.prompt);
-                    }
-                    else {
-                        event.dialog.add('选择' + get.translation(target) + '的一张牌');
-                    }
-                    if (event.prompt2) {
-                        event.dialog.addText(event.prompt2);
-                    }
-                    var directh = true;
-                    for (var i = 0; i < event.position.length; i++) {
-                        if (event.position[i] == 'h') {
-                            var hs = target.getCards('h');
-                            if (hs.length) {
-                                event.dialog.addText('手牌区');
-                                hs.randomSort();
-                                if (event.visible || target.isUnderControl(true)) {
-                                    event.dialog.add(hs);
-                                    directh = false;
+                // lib.element.content.choosePlayerCardByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
+                //     "step 0"
+                //     if (!event.dialog) event.dialog = ui.create.dialog('hidden');
+                //     else if (!event.isMine) {
+                //         event.dialog.style.display = 'none';
+                //     }
+                //     if (event.prompt) {
+                //         event.dialog.add(event.prompt);
+                //     }
+                //     else {
+                //         event.dialog.add('选择' + get.translation(target) + '的一张牌');
+                //     }
+                //     if (event.prompt2) {
+                //         event.dialog.addText(event.prompt2);
+                //     }
+                //     var directh = true;
+                //     for (var i = 0; i < event.position.length; i++) {
+                //         if (event.position[i] == 'h') {
+                //             var hs = target.getCards('h');
+                //             if (hs.length) {
+                //                 event.dialog.addText('手牌区');
+                //                 hs.randomSort();
+                //                 if (event.visible || target.isUnderControl(true)) {
+                //                     event.dialog.add(hs);
+                //                     directh = false;
+                //                 }
+                //                 else {
+                //                     // console.log("choosePlayerCardByMingzhi===>",target.storage.mingzhi,hs);
+                //                     if (target.storage.mingzhi) {//明置手牌
+                //                         for (var j = 0; j < hs.length; j++) {
+                //                             if (target.storage.mingzhi.contains(hs[j])) {
+                //                                 event.dialog.add([hs[j]]);
+                //                             } else {
+                //                                 event.dialog.add([[hs[j]], 'blank']);
+                //                             }
+                //                         }
+                //                         directh = false;
+                //                     } else {
+                //                         event.dialog.add([hs, 'blank']);
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //         else if (event.position[i] == 'e') {
+                //             var es = target.getCards('e');
+                //             if (es.length) {
+                //                 event.dialog.addText('装备区');
+                //                 event.dialog.add(es);
+                //                 directh = false;
+                //             }
+                //         }
+                //         else if (event.position[i] == 'j') {
+                //             var js = target.getCards('j');
+                //             if (js.length) {
+                //                 event.dialog.addText('判定区');
+                //                 event.dialog.add(js);
+                //                 directh = false;
+                //             }
+                //         }
+                //     }
+                //     if (event.dialog.buttons.length == 0) {
+                //         event.finish();
+                //         return;
+                //     }
+                //     var cs = target.getCards(event.position);
+                //     var select = get.select(event.selectButton);
+                //     if (event.forced && select[0] >= cs.length) {
+                //         event.result = {
+                //             bool: true,
+                //             buttons: event.dialog.buttons,
+                //             links: cs
+                //         }
+                //     }
+                //     else if (event.forced && directh && select[0] == select[1]) {
+                //         event.result = {
+                //             bool: true,
+                //             buttons: event.dialog.buttons.randomGets(select[0]),
+                //             links: []
+                //         }
+                //         for (var i = 0; i < event.result.buttons.length; i++) {
+                //             event.result.links[i] = event.result.buttons[i].link;
+                //         }
+                //     }
+                //     else {
+                //         if (event.isMine()) {
+                //             event.dialog.open();
+                //             game.check();
+                //             game.pause();
+                //         }
+                //         else if (event.isOnline()) {
+                //             event.send();
+                //         }
+                //         else {
+                //             event.result = 'ai';
+                //         }
+                //     }
+                //     "step 1"
+                //     if (event.result == 'ai') {
+                //         game.check();
+                //         if (ai.basic.chooseButton(event.ai) || forced) ui.click.ok();
+                //         else ui.click.cancel();
+                //     }
+                //     event.dialog.close();
+                //     if (event.result.links) {
+                //         event.result.cards = event.result.links.slice(0);
+                //     }
+                //     event.resume();
+                // }
+
+                // lib.element.content.discardPlayerCardByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
+                //     "step 0"
+                //     if (event.directresult) {
+                //         event.result = {
+                //             buttons: [],
+                //             cards: event.directresult.slice(0),
+                //             links: event.directresult.slice(0),
+                //             targets: [],
+                //             confirm: 'ok',
+                //             bool: true
+                //         };
+                //         event.cards = event.directresult.slice(0);
+                //         event.goto(2);
+                //         return;
+                //     }
+                //     if (!event.dialog) event.dialog = ui.create.dialog('hidden');
+                //     else if (!event.isMine) {
+                //         event.dialog.style.display = 'none';
+                //     }
+                //     if (event.prompt == undefined) {
+                //         var str = '弃置' + get.translation(target);
+                //         var range = get.select(event.selectButton);
+                //         if (range[0] == range[1]) str += get.cnNumber(range[0]);
+                //         else if (range[1] == Infinity) str += '至少' + get.cnNumber(range[0]);
+                //         else str += get.cnNumber(range[0]) + '至' + get.cnNumber(range[1]);
+                //         str += '张';
+                //         if (event.position == 'h' || event.position == undefined) str += '手';
+                //         if (event.position == 'e') str += '装备';
+                //         str += '牌';
+                //         event.prompt = str;
+                //     }
+                //     if (event.prompt) {
+                //         event.dialog.add(event.prompt);
+                //     }
+                //     if (event.prompt2) {
+                //         event.dialog.addText(event.prompt2);
+                //     }
+                //     var directh = true;
+                //     for (var i = 0; i < event.position.length; i++) {
+                //         if (event.position[i] == 'h') {
+                //             var hs = target.getDiscardableCards(player, 'h');
+                //             if (hs.length) {
+                //                 event.dialog.addText('手牌区');
+                //                 hs.randomSort();
+                //                 if (event.visible || target.isUnderControl(true)) {
+                //                     event.dialog.add(hs);
+                //                     directh = false;
+                //                 }
+                //                 else {
+                //                     if (target.storage.mingzhi) {//明置手牌
+                //                         for (var j = 0; j < hs.length; j++) {
+                //                             if (target.storage.mingzhi.contains(hs[j])) {
+                //                                 event.dialog.add([hs[j]]);
+                //                             } else {
+                //                                 event.dialog.add([[hs[j]], 'blank']);
+                //                             }
+                //                         }
+                //                         directh = false;
+                //                     } else {
+                //                         event.dialog.add([hs, 'blank']);
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //         else if (event.position[i] == 'e') {
+                //             var es = target.getDiscardableCards(player, 'e');
+                //             if (es.length) {
+                //                 event.dialog.addText('装备区');
+                //                 event.dialog.add(es);
+                //                 directh = false;
+                //             }
+                //         }
+                //         else if (event.position[i] == 'j') {
+                //             var js = target.getDiscardableCards(player, 'j');
+                //             if (js.length) {
+                //                 event.dialog.addText('判定区');
+                //                 event.dialog.add(js);
+                //                 directh = false;
+                //             }
+                //         }
+                //     }
+                //     if (event.dialog.buttons.length == 0) {
+                //         event.finish();
+                //         return;
+                //     }
+                //     var cs = target.getCards(event.position);
+                //     var select = get.select(event.selectButton);
+                //     if (event.forced && select[0] >= cs.length) {
+                //         event.result = {
+                //             bool: true,
+                //             buttons: event.dialog.buttons,
+                //             links: cs
+                //         }
+                //     }
+                //     else if (event.forced && directh && select[0] == select[1]) {
+                //         event.result = {
+                //             bool: true,
+                //             buttons: event.dialog.buttons.randomGets(select[0]),
+                //             links: []
+                //         }
+                //         for (var i = 0; i < event.result.buttons.length; i++) {
+                //             event.result.links[i] = event.result.buttons[i].link;
+                //         }
+                //     }
+                //     else {
+                //         if (event.isMine()) {
+                //             event.dialog.open();
+                //             game.check();
+                //             game.pause();
+                //         }
+                //         else if (event.isOnline()) {
+                //             event.send();
+                //         }
+                //         else {
+                //             event.result = 'ai';
+                //         }
+                //     }
+                //     "step 1"
+                //     if (event.result == 'ai') {
+                //         game.check();
+                //         if (ai.basic.chooseButton(event.ai) || forced) ui.click.ok();
+                //         else ui.click.cancel();
+                //     }
+                //     event.dialog.close();
+                //     "step 2"
+                //     event.resume();
+                //     if (event.result.bool && event.result.links && !game.online) {
+                //         if (event.logSkill) {
+                //             if (typeof event.logSkill == 'string') {
+                //                 player.logSkill(event.logSkill);
+                //             }
+                //             else if (Array.isArray(event.logSkill)) {
+                //                 player.logSkill.apply(player, event.logSkill);
+                //             }
+                //         }
+                //         var cards = [];
+                //         for (var i = 0; i < event.result.links.length; i++) {
+                //             cards.push(event.result.links[i]);
+                //         }
+                //         event.result.cards = event.result.links.slice(0);
+                //         event.cards = cards;
+                //         event.trigger("rewriteDiscardResult");
+                //     }
+                //     "step 3"
+                //     if (event.boolline) {
+                //         player.line(target, 'green');
+                //     }
+                //     if (!event.chooseonly) {
+                //         var next = target.discard(event.cards, 'notBySelf');
+                //         if (event.delay === false) {
+                //             next.set('delay', false);
+                //         }
+                //     }
+                // }
+
+                // lib.element.content.gainPlayerCardByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
+                //     "step 0"
+                //     if (event.directresult) {
+                //         event.result = {
+                //             buttons: [],
+                //             cards: event.directresult.slice(0),
+                //             links: event.directresult.slice(0),
+                //             targets: [],
+                //             confirm: 'ok',
+                //             bool: true
+                //         };
+                //         event.cards = event.directresult.slice(0);
+                //         event.goto(2);
+                //         return;
+                //     }
+                //     if (!event.dialog) event.dialog = ui.create.dialog('hidden');
+                //     else if (!event.isMine) {
+                //         event.dialog.style.display = 'none';
+                //     }
+                //     if (event.prompt == undefined) {
+                //         var str = '获得' + get.translation(target);
+                //         var range = get.select(event.selectButton);
+                //         if (range[0] == range[1]) str += get.cnNumber(range[0]);
+                //         else if (range[1] == Infinity) str += '至少' + get.cnNumber(range[0]);
+                //         else str += get.cnNumber(range[0]) + '至' + get.cnNumber(range[1]);
+                //         str += '张';
+                //         if (event.position == 'h' || event.position == undefined) str += '手';
+                //         if (event.position == 'e') str += '装备';
+                //         str += '牌';
+                //         event.prompt = str;
+                //     }
+                //     if (event.prompt) {
+                //         event.dialog.add(event.prompt);
+                //     }
+                //     if (event.prompt2) {
+                //         event.dialog.addText(event.prompt2);
+                //     }
+                //     var directh = true;
+                //     for (var i = 0; i < event.position.length; i++) {
+                //         if (event.position[i] == 'h') {
+                //             var hs = target.getGainableCards(player, 'h');
+                //             if (hs.length) {
+                //                 event.dialog.addText('手牌区');
+                //                 hs.randomSort();
+                //                 if (event.visible || target.isUnderControl(true)) {
+                //                     event.dialog.add(hs);
+                //                     directh = false;
+                //                 }
+                //                 else {
+                //                     if (target.storage.mingzhi) {//明置手牌
+                //                         for (var j = 0; j < hs.length; j++) {
+                //                             if (target.storage.mingzhi.contains(hs[j])) {
+                //                                 event.dialog.add([hs[j]]);
+                //                             } else {
+                //                                 event.dialog.add([[hs[j]], 'blank']);
+                //                             }
+                //                         }
+                //                         directh = false;
+                //                     } else {
+                //                         event.dialog.add([hs, 'blank']);
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //         else if (event.position[i] == 'e') {
+                //             var es = target.getGainableCards(player, 'e');
+                //             if (es.length) {
+                //                 event.dialog.addText('装备区');
+                //                 event.dialog.add(es);
+                //                 directh = false;
+                //             }
+                //         }
+                //         else if (event.position[i] == 'j') {
+                //             var js = target.getGainableCards(player, 'j');
+                //             if (js.length) {
+                //                 event.dialog.addText('判定区');
+                //                 event.dialog.add(js);
+                //                 directh = false;
+                //             }
+                //         }
+                //     }
+                //     if (event.dialog.buttons.length == 0) {
+                //         event.dialog.close();
+                //         event.finish();
+                //         return;
+                //     }
+                //     var cs = target.getCards(event.position);
+                //     var select = get.select(event.selectButton);
+                //     if (event.forced && select[0] >= cs.length) {
+                //         event.result = {
+                //             bool: true,
+                //             buttons: event.dialog.buttons,
+                //             links: cs
+                //         }
+                //     }
+                //     else if (event.forced && directh && select[0] == select[1] && !target.storage.mingzhi) {
+                //         event.result = {
+                //             bool: true,
+                //             buttons: event.dialog.buttons.randomGets(select[0]),
+                //             links: []
+                //         }
+                //         for (var i = 0; i < event.result.buttons.length; i++) {
+                //             event.result.links[i] = event.result.buttons[i].link;
+                //         }
+                //     }
+                //     else {
+                //         if (event.isMine()) {
+                //             event.dialog.open();
+                //             game.check();
+                //             game.pause();
+                //         }
+                //         else if (event.isOnline()) {
+                //             event.send();
+                //         }
+                //         else {
+                //             event.result = 'ai';
+                //         }
+                //     }
+                //     "step 1"
+                //     if (event.result == 'ai') {
+                //         game.check();
+                //         if (ai.basic.chooseButton(event.ai) || forced) ui.click.ok();
+                //         else ui.click.cancel();
+                //     }
+                //     event.dialog.close();
+                //     "step 2"
+                //     event.resume();
+                //     if (game.online || !event.result.bool) {
+                //         event.finish();
+                //     }
+                //     "step 3"
+                //     if (event.logSkill && event.result.bool && !game.online) {
+                //         if (typeof event.logSkill == 'string') {
+                //             player.logSkill(event.logSkill);
+                //         }
+                //         else if (Array.isArray(event.logSkill)) {
+                //             player.logSkill.apply(player, event.logSkill);
+                //         }
+                //     }
+                //     var cards = [];
+                //     for (var i = 0; i < event.result.links.length; i++) {
+                //         cards.push(event.result.links[i]);
+                //     }
+                //     event.result.cards = event.result.links.slice(0);
+                //     event.cards = cards;
+                //     event.trigger("rewriteGainResult");
+                //     "step 4"
+                //     if (event.boolline) {
+                //         player.line(target, 'green');
+                //     }
+                //     if (!event.chooseonly) {
+                //         var next = player.gain(event.cards, target, event.visibleMove ? 'give' : 'giveAuto', 'bySelf');
+                //         if (event.delay === false) {
+                //             next.set('delay', false);
+                //         }
+                //     }
+                //     else target[event.visibleMove ? '$give' : '$giveAuto'](cards, player);
+                // }
+
+                // lib.element.content.loseByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
+                //     "step 0"
+                //     var hs = [], es = [], js = [];
+                //     var hej = player.getCards('hej');
+                //     event.stockcards = cards.slice(0);
+                //     for (var i = 0; i < cards.length; i++) {
+                //         cards[i].style.transform += ' scale(0.2)';
+                //         cards[i].classList.remove('glow');
+                //         cards[i].recheck();
+                //         var info = lib.card[cards[i].name];
+                //         if (info.destroy || cards[i]._destroy) {
+                //             cards[i].delete();
+                //             cards[i].destroyed = info.destroy || cards[i]._destroy;
+                //         }
+                //         else if (event.position) {
+                //             if (_status.discarded) {
+                //                 if (event.position == ui.discardPile) {
+                //                     _status.discarded.add(cards[i]);
+                //                 }
+                //                 else {
+                //                     _status.discarded.remove(cards[i]);
+                //                 }
+                //             }
+                //             cards[i].goto(event.position);
+                //         }
+                //         else {
+                //             cards[i].delete();
+                //         }
+                //         // 明置的话就去除标记
+                //         if (player.storage.mingzhi && player.storage.mingzhi.contains(cards[i])) {
+                //             if (player.storage.mingzhi.length == 1) {
+                //                 delete player.storage.mingzhi;
+                //                 player.unmarkSkill('mingzhi');
+                //             } else {
+                //                 player.storage.mingzhi.remove(cards[i]);
+                //                 player.syncStorage('mingzhi');
+                //             }
+                //         }
+                //         if (!hej.contains(cards[i])) {
+                //             cards.splice(i--, 1);
+                //         }
+                //         else if (cards[i].parentNode) {
+                //             if (cards[i].parentNode.classList.contains('equips')) {
+                //                 cards[i].original = 'e';
+                //                 es.push(cards[i]);
+                //             }
+                //             else if (cards[i].parentNode.classList.contains('judges')) {
+                //                 cards[i].original = 'j';
+                //                 js.push(cards[i]);
+                //             }
+                //             else if (cards[i].parentNode.classList.contains('handcards')) {
+                //                 cards[i].original = 'h';
+                //                 hs.push(cards[i]);
+                //             }
+                //             else {
+                //                 cards[i].original = null;
+                //             }
+                //         }
+                //     }
+                //     if (player == game.me) ui.updatehl();
+                //     ui.updatej(player);
+                //     game.broadcast(function (player, cards, num) {
+                //         for (var i = 0; i < cards.length; i++) {
+                //             cards[i].classList.remove('glow');
+                //             cards[i].delete();
+                //         }
+                //         if (player == game.me) {
+                //             ui.updatehl();
+                //         }
+                //         ui.updatej(player);
+                //         _status.cardPileNum = num;
+                //     }, player, cards, ui.cardPile.childNodes.length);
+                //     game.addVideo('lose', player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js)]);
+                //     player.update();
+                //     game.addVideo('loseAfter', player);
+                //     event.num = 0;
+                //     "step 1"
+                //     if (num < cards.length) {
+                //         if (cards[num].original == 'e') {
+                //             event.loseEquip = true;
+                //             player.removeEquipTrigger(cards[num]);
+                //             var info = get.info(cards[num]);
+                //             if (info.onLose && (!info.filterLose || info.filterLose(cards[num], player))) {
+                //                 event.goto(2);
+                //                 return;
+                //             }
+                //         }
+                //         event.num++;
+                //         event.redo();
+                //     }
+                //     else {
+                //         if (event.loseEquip) {
+                //             player.addEquipTrigger();
+                //         }
+                //         event.finish();
+                //     }
+                //     "step 2"
+                //     var info = get.info(cards[num]);
+                //     if (info.loseDelay != false && (player.isAlive() || info.forceDie)) {
+                //         player.popup(cards[num].name);
+                //         game.delayx();
+                //     }
+                //     if (Array.isArray(info.onLose)) {
+                //         for (var i = 0; i < info.onLose.length; i++) {
+                //             var next = game.createEvent('lose_' + cards[num].name);
+                //             next.setContent(info.onLose[i]);
+                //             if (info.forceDie) next.forceDie = true;
+                //             next.player = player;
+                //             next.card = cards[num];
+                //         }
+                //     }
+                //     else {
+                //         var next = game.createEvent('lose_' + cards[num].name);
+                //         next.setContent(info.onLose);
+                //         next.player = player;
+                //         if (info.forceDie) next.forceDie = true;
+                //         next.card = cards[num];
+                //     }
+                //     event.num++;
+                //     event.goto(1);
+                // }
+
+                //使用替换方法，替换方法内部：
+                lib.element.content.choosePlayerCardByMingzhi = lib.element.content.choosePlayerCard;
+                lib.element.content.discardPlayerCardByMingzhi = lib.element.content.discardPlayerCard;
+                lib.element.content.gainPlayerCardByMingzhi = lib.element.content.gainPlayerCard;
+                lib.element.content.loseByMingzhi = lib.element.content.lose;
+                lib.app.reWriteFunctionX(lib.element.content,{
+                    choosePlayerCardByMingzhi:[
+                        "event.dialog.add([hs,'blank']);",
+                        `
+                        if (target.storage.mingzhi) {//明置手牌
+                            for (var j = 0; j < hs.length; j++) {
+                                if (target.storage.mingzhi.contains(hs[j])) {
+                                    event.dialog.add([hs[j]]);
+                                } else {
+                                    event.dialog.add([[hs[j]], 'blank']);
                                 }
-                                else {
-                                    // console.log("choosePlayerCardByMingzhi===>",target.storage.mingzhi,hs);
-                                    if (target.storage.mingzhi) {//明置手牌
-                                        for (var j = 0; j < hs.length; j++) {
-                                            if (target.storage.mingzhi.contains(hs[j])) {
-                                                event.dialog.add([hs[j]]);
-                                            } else {
-                                                event.dialog.add([[hs[j]], 'blank']);
-                                            }
-                                        }
-                                        directh = false;
+                            }
+                            directh = false;
+                        } else {
+                            event.dialog.add([hs, 'blank']);
+                        }
+                        `
+                    ],
+                    discardPlayerCardByMingzhi:[
+                        "event.dialog.add([hs,'blank']);",
+                        `
+                        if (target.storage.mingzhi) {//明置手牌
+                            for (var j = 0; j < hs.length; j++) {
+                                if (target.storage.mingzhi.contains(hs[j])) {
+                                    event.dialog.add([hs[j]]);
+                                } else {
+                                    event.dialog.add([[hs[j]], 'blank']);
+                                }
+                            }
+                            directh = false;
+                        } else {
+                            event.dialog.add([hs, 'blank']);
+                        }
+                        `
+                    ],
+                    gainPlayerCardByMingzhi:[
+                        [
+                            "event.dialog.add([hs,'blank']);",
+                            `
+                            if (target.storage.mingzhi) {//明置手牌
+                                for (var j = 0; j < hs.length; j++) {
+                                    if (target.storage.mingzhi.contains(hs[j])) {
+                                        event.dialog.add([hs[j]]);
                                     } else {
-                                        event.dialog.add([hs, 'blank']);
+                                        event.dialog.add([[hs[j]], 'blank']);
                                     }
                                 }
-                            }
-                        }
-                        else if (event.position[i] == 'e') {
-                            var es = target.getCards('e');
-                            if (es.length) {
-                                event.dialog.addText('装备区');
-                                event.dialog.add(es);
                                 directh = false;
+                            } else {
+                                event.dialog.add([hs, 'blank']);
                             }
-                        }
-                        else if (event.position[i] == 'j') {
-                            var js = target.getCards('j');
-                            if (js.length) {
-                                event.dialog.addText('判定区');
-                                event.dialog.add(js);
-                                directh = false;
-                            }
-                        }
-                    }
-                    if (event.dialog.buttons.length == 0) {
-                        event.finish();
-                        return;
-                    }
-                    var cs = target.getCards(event.position);
-                    var select = get.select(event.selectButton);
-                    if (event.forced && select[0] >= cs.length) {
-                        event.result = {
-                            bool: true,
-                            buttons: event.dialog.buttons,
-                            links: cs
-                        }
-                    }
-                    else if (event.forced && directh && select[0] == select[1]) {
-                        event.result = {
-                            bool: true,
-                            buttons: event.dialog.buttons.randomGets(select[0]),
-                            links: []
-                        }
-                        for (var i = 0; i < event.result.buttons.length; i++) {
-                            event.result.links[i] = event.result.buttons[i].link;
-                        }
-                    }
-                    else {
-                        if (event.isMine()) {
-                            event.dialog.open();
-                            game.check();
-                            game.pause();
-                        }
-                        else if (event.isOnline()) {
-                            event.send();
-                        }
-                        else {
-                            event.result = 'ai';
-                        }
-                    }
-                    "step 1"
-                    if (event.result == 'ai') {
-                        game.check();
-                        if (ai.basic.chooseButton(event.ai) || forced) ui.click.ok();
-                        else ui.click.cancel();
-                    }
-                    event.dialog.close();
-                    if (event.result.links) {
-                        event.result.cards = event.result.links.slice(0);
-                    }
-                    event.resume();
-                }
-
-                lib.element.content.discardPlayerCardByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
-                    "step 0"
-                    if (event.directresult) {
-                        event.result = {
-                            buttons: [],
-                            cards: event.directresult.slice(0),
-                            links: event.directresult.slice(0),
-                            targets: [],
-                            confirm: 'ok',
-                            bool: true
-                        };
-                        event.cards = event.directresult.slice(0);
-                        event.goto(2);
-                        return;
-                    }
-                    if (!event.dialog) event.dialog = ui.create.dialog('hidden');
-                    else if (!event.isMine) {
-                        event.dialog.style.display = 'none';
-                    }
-                    if (event.prompt == undefined) {
-                        var str = '弃置' + get.translation(target);
-                        var range = get.select(event.selectButton);
-                        if (range[0] == range[1]) str += get.cnNumber(range[0]);
-                        else if (range[1] == Infinity) str += '至少' + get.cnNumber(range[0]);
-                        else str += get.cnNumber(range[0]) + '至' + get.cnNumber(range[1]);
-                        str += '张';
-                        if (event.position == 'h' || event.position == undefined) str += '手';
-                        if (event.position == 'e') str += '装备';
-                        str += '牌';
-                        event.prompt = str;
-                    }
-                    if (event.prompt) {
-                        event.dialog.add(event.prompt);
-                    }
-                    if (event.prompt2) {
-                        event.dialog.addText(event.prompt2);
-                    }
-                    var directh = true;
-                    for (var i = 0; i < event.position.length; i++) {
-                        if (event.position[i] == 'h') {
-                            var hs = target.getDiscardableCards(player, 'h');
-                            if (hs.length) {
-                                event.dialog.addText('手牌区');
-                                hs.randomSort();
-                                if (event.visible || target.isUnderControl(true)) {
-                                    event.dialog.add(hs);
-                                    directh = false;
-                                }
-                                else {
-                                    if (target.storage.mingzhi) {//明置手牌
-                                        for (var j = 0; j < hs.length; j++) {
-                                            if (target.storage.mingzhi.contains(hs[j])) {
-                                                event.dialog.add([hs[j]]);
-                                            } else {
-                                                event.dialog.add([[hs[j]], 'blank']);
-                                            }
-                                        }
-                                        directh = false;
-                                    } else {
-                                        event.dialog.add([hs, 'blank']);
-                                    }
-                                }
-                            }
-                        }
-                        else if (event.position[i] == 'e') {
-                            var es = target.getDiscardableCards(player, 'e');
-                            if (es.length) {
-                                event.dialog.addText('装备区');
-                                event.dialog.add(es);
-                                directh = false;
-                            }
-                        }
-                        else if (event.position[i] == 'j') {
-                            var js = target.getDiscardableCards(player, 'j');
-                            if (js.length) {
-                                event.dialog.addText('判定区');
-                                event.dialog.add(js);
-                                directh = false;
-                            }
-                        }
-                    }
-                    if (event.dialog.buttons.length == 0) {
-                        event.finish();
-                        return;
-                    }
-                    var cs = target.getCards(event.position);
-                    var select = get.select(event.selectButton);
-                    if (event.forced && select[0] >= cs.length) {
-                        event.result = {
-                            bool: true,
-                            buttons: event.dialog.buttons,
-                            links: cs
-                        }
-                    }
-                    else if (event.forced && directh && select[0] == select[1]) {
-                        event.result = {
-                            bool: true,
-                            buttons: event.dialog.buttons.randomGets(select[0]),
-                            links: []
-                        }
-                        for (var i = 0; i < event.result.buttons.length; i++) {
-                            event.result.links[i] = event.result.buttons[i].link;
-                        }
-                    }
-                    else {
-                        if (event.isMine()) {
-                            event.dialog.open();
-                            game.check();
-                            game.pause();
-                        }
-                        else if (event.isOnline()) {
-                            event.send();
-                        }
-                        else {
-                            event.result = 'ai';
-                        }
-                    }
-                    "step 1"
-                    if (event.result == 'ai') {
-                        game.check();
-                        if (ai.basic.chooseButton(event.ai) || forced) ui.click.ok();
-                        else ui.click.cancel();
-                    }
-                    event.dialog.close();
-                    "step 2"
-                    event.resume();
-                    if (event.result.bool && event.result.links && !game.online) {
-                        if (event.logSkill) {
-                            if (typeof event.logSkill == 'string') {
-                                player.logSkill(event.logSkill);
-                            }
-                            else if (Array.isArray(event.logSkill)) {
-                                player.logSkill.apply(player, event.logSkill);
-                            }
-                        }
-                        var cards = [];
-                        for (var i = 0; i < event.result.links.length; i++) {
-                            cards.push(event.result.links[i]);
-                        }
-                        event.result.cards = event.result.links.slice(0);
-                        event.cards = cards;
-                        event.trigger("rewriteDiscardResult");
-                    }
-                    "step 3"
-                    if (event.boolline) {
-                        player.line(target, 'green');
-                    }
-                    if (!event.chooseonly) {
-                        var next = target.discard(event.cards, 'notBySelf');
-                        if (event.delay === false) {
-                            next.set('delay', false);
-                        }
-                    }
-                }
-
-                lib.element.content.gainPlayerCardByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
-                    "step 0"
-                    if (event.directresult) {
-                        event.result = {
-                            buttons: [],
-                            cards: event.directresult.slice(0),
-                            links: event.directresult.slice(0),
-                            targets: [],
-                            confirm: 'ok',
-                            bool: true
-                        };
-                        event.cards = event.directresult.slice(0);
-                        event.goto(2);
-                        return;
-                    }
-                    if (!event.dialog) event.dialog = ui.create.dialog('hidden');
-                    else if (!event.isMine) {
-                        event.dialog.style.display = 'none';
-                    }
-                    if (event.prompt == undefined) {
-                        var str = '获得' + get.translation(target);
-                        var range = get.select(event.selectButton);
-                        if (range[0] == range[1]) str += get.cnNumber(range[0]);
-                        else if (range[1] == Infinity) str += '至少' + get.cnNumber(range[0]);
-                        else str += get.cnNumber(range[0]) + '至' + get.cnNumber(range[1]);
-                        str += '张';
-                        if (event.position == 'h' || event.position == undefined) str += '手';
-                        if (event.position == 'e') str += '装备';
-                        str += '牌';
-                        event.prompt = str;
-                    }
-                    if (event.prompt) {
-                        event.dialog.add(event.prompt);
-                    }
-                    if (event.prompt2) {
-                        event.dialog.addText(event.prompt2);
-                    }
-                    var directh = true;
-                    for (var i = 0; i < event.position.length; i++) {
-                        if (event.position[i] == 'h') {
-                            var hs = target.getGainableCards(player, 'h');
-                            if (hs.length) {
-                                event.dialog.addText('手牌区');
-                                hs.randomSort();
-                                if (event.visible || target.isUnderControl(true)) {
-                                    event.dialog.add(hs);
-                                    directh = false;
-                                }
-                                else {
-                                    if (target.storage.mingzhi) {//明置手牌
-                                        for (var j = 0; j < hs.length; j++) {
-                                            if (target.storage.mingzhi.contains(hs[j])) {
-                                                event.dialog.add([hs[j]]);
-                                            } else {
-                                                event.dialog.add([[hs[j]], 'blank']);
-                                            }
-                                        }
-                                        directh = false;
-                                    } else {
-                                        event.dialog.add([hs, 'blank']);
-                                    }
-                                }
-                            }
-                        }
-                        else if (event.position[i] == 'e') {
-                            var es = target.getGainableCards(player, 'e');
-                            if (es.length) {
-                                event.dialog.addText('装备区');
-                                event.dialog.add(es);
-                                directh = false;
-                            }
-                        }
-                        else if (event.position[i] == 'j') {
-                            var js = target.getGainableCards(player, 'j');
-                            if (js.length) {
-                                event.dialog.addText('判定区');
-                                event.dialog.add(js);
-                                directh = false;
-                            }
-                        }
-                    }
-                    if (event.dialog.buttons.length == 0) {
-                        event.dialog.close();
-                        event.finish();
-                        return;
-                    }
-                    var cs = target.getCards(event.position);
-                    var select = get.select(event.selectButton);
-                    if (event.forced && select[0] >= cs.length) {
-                        event.result = {
-                            bool: true,
-                            buttons: event.dialog.buttons,
-                            links: cs
-                        }
-                    }
-                    else if (event.forced && directh && select[0] == select[1] && !target.storage.mingzhi) {
-                        event.result = {
-                            bool: true,
-                            buttons: event.dialog.buttons.randomGets(select[0]),
-                            links: []
-                        }
-                        for (var i = 0; i < event.result.buttons.length; i++) {
-                            event.result.links[i] = event.result.buttons[i].link;
-                        }
-                    }
-                    else {
-                        if (event.isMine()) {
-                            event.dialog.open();
-                            game.check();
-                            game.pause();
-                        }
-                        else if (event.isOnline()) {
-                            event.send();
-                        }
-                        else {
-                            event.result = 'ai';
-                        }
-                    }
-                    "step 1"
-                    if (event.result == 'ai') {
-                        game.check();
-                        if (ai.basic.chooseButton(event.ai) || forced) ui.click.ok();
-                        else ui.click.cancel();
-                    }
-                    event.dialog.close();
-                    "step 2"
-                    event.resume();
-                    if (game.online || !event.result.bool) {
-                        event.finish();
-                    }
-                    "step 3"
-                    if (event.logSkill && event.result.bool && !game.online) {
-                        if (typeof event.logSkill == 'string') {
-                            player.logSkill(event.logSkill);
-                        }
-                        else if (Array.isArray(event.logSkill)) {
-                            player.logSkill.apply(player, event.logSkill);
-                        }
-                    }
-                    var cards = [];
-                    for (var i = 0; i < event.result.links.length; i++) {
-                        cards.push(event.result.links[i]);
-                    }
-                    event.result.cards = event.result.links.slice(0);
-                    event.cards = cards;
-                    event.trigger("rewriteGainResult");
-                    "step 4"
-                    if (event.boolline) {
-                        player.line(target, 'green');
-                    }
-                    if (!event.chooseonly) {
-                        var next = player.gain(event.cards, target, event.visibleMove ? 'give' : 'giveAuto', 'bySelf');
-                        if (event.delay === false) {
-                            next.set('delay', false);
-                        }
-                    }
-                    else target[event.visibleMove ? '$give' : '$giveAuto'](cards, player);
-                }
-
-                lib.element.content.loseByMingzhi = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
-                    "step 0"
-                    var hs = [], es = [], js = [];
-                    var hej = player.getCards('hej');
-                    event.stockcards = cards.slice(0);
-                    for (var i = 0; i < cards.length; i++) {
-                        cards[i].style.transform += ' scale(0.2)';
-                        cards[i].classList.remove('glow');
-                        cards[i].recheck();
-                        var info = lib.card[cards[i].name];
-                        if (info.destroy || cards[i]._destroy) {
-                            cards[i].delete();
-                            cards[i].destroyed = info.destroy || cards[i]._destroy;
-                        }
-                        else if (event.position) {
-                            if (_status.discarded) {
-                                if (event.position == ui.discardPile) {
-                                    _status.discarded.add(cards[i]);
-                                }
-                                else {
-                                    _status.discarded.remove(cards[i]);
-                                }
-                            }
-                            cards[i].goto(event.position);
-                        }
-                        else {
-                            cards[i].delete();
-                        }
+                            `
+                        ],
+                        [
+                            "else if(event.forced&&directh&&!event.isOnline()&&select[0]==select[1]",
+                            "&& !target.storage.mingzhi",
+                            NG.ReWriteFunctionType.append
+                        ]
+                    ],
+                    loseByMingzhi:[
+                        "if(!hej.contains(cards[i])){",
+                        `
                         // 明置的话就去除标记
                         if (player.storage.mingzhi && player.storage.mingzhi.contains(cards[i])) {
                             if (player.storage.mingzhi.length == 1) {
@@ -469,89 +630,20 @@ module ZJNGEx {
                                 player.syncStorage('mingzhi');
                             }
                         }
-                        if (!hej.contains(cards[i])) {
-                            cards.splice(i--, 1);
-                        }
-                        else if (cards[i].parentNode) {
-                            if (cards[i].parentNode.classList.contains('equips')) {
-                                cards[i].original = 'e';
-                                es.push(cards[i]);
-                            }
-                            else if (cards[i].parentNode.classList.contains('judges')) {
-                                cards[i].original = 'j';
-                                js.push(cards[i]);
-                            }
-                            else if (cards[i].parentNode.classList.contains('handcards')) {
-                                cards[i].original = 'h';
-                                hs.push(cards[i]);
-                            }
-                            else {
-                                cards[i].original = null;
-                            }
-                        }
-                    }
-                    if (player == game.me) ui.updatehl();
-                    ui.updatej(player);
-                    game.broadcast(function (player, cards, num) {
-                        for (var i = 0; i < cards.length; i++) {
-                            cards[i].classList.remove('glow');
-                            cards[i].delete();
-                        }
-                        if (player == game.me) {
-                            ui.updatehl();
-                        }
-                        ui.updatej(player);
-                        _status.cardPileNum = num;
-                    }, player, cards, ui.cardPile.childNodes.length);
-                    game.addVideo('lose', player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js)]);
-                    player.update();
-                    game.addVideo('loseAfter', player);
-                    event.num = 0;
-                    "step 1"
-                    if (num < cards.length) {
-                        if (cards[num].original == 'e') {
-                            event.loseEquip = true;
-                            player.removeEquipTrigger(cards[num]);
-                            var info = get.info(cards[num]);
-                            if (info.onLose && (!info.filterLose || info.filterLose(cards[num], player))) {
-                                event.goto(2);
-                                return;
-                            }
-                        }
-                        event.num++;
-                        event.redo();
-                    }
-                    else {
-                        if (event.loseEquip) {
-                            player.addEquipTrigger();
-                        }
-                        event.finish();
-                    }
-                    "step 2"
-                    var info = get.info(cards[num]);
-                    if (info.loseDelay != false && (player.isAlive() || info.forceDie)) {
-                        player.popup(cards[num].name);
-                        game.delayx();
-                    }
-                    if (Array.isArray(info.onLose)) {
-                        for (var i = 0; i < info.onLose.length; i++) {
-                            var next = game.createEvent('lose_' + cards[num].name);
-                            next.setContent(info.onLose[i]);
-                            if (info.forceDie) next.forceDie = true;
-                            next.player = player;
-                            next.card = cards[num];
-                        }
-                    }
-                    else {
-                        var next = game.createEvent('lose_' + cards[num].name);
-                        next.setContent(info.onLose);
-                        next.player = player;
-                        if (info.forceDie) next.forceDie = true;
-                        next.card = cards[num];
-                    }
-                    event.num++;
-                    event.goto(1);
-                }
+                        `,
+                        NG.ReWriteFunctionType.insert
+                    ],
+                });
+                // else if (event.forced && directh && select[0] == select[1] && !target.storage.mingzhi) {
+                //目前一个方法要修改多个地方，先一个个列出来分别替换：(新增整合在一起处理)
+                // lib.app.reWriteFunctionX(lib.element.content,{
+                //     gainPlayerCardByMingzhi:[
+                //         "else if(event.forced&&directh&&!event.isOnline()&&select[0]==select[1]",
+                //         "&& !target.storage.mingzhi",
+                //         "append"
+                //     ],
+                // });
+
 
                 //明置相关操作方法
                 lib.element.content.mingzhiCard = function (event: GameEvent, step: number, source: Player, player: Player, target: Player, targets: Player[], card: Card, cards: Card[], skill: string, forced: boolean, num: number, trigger: GameEvent, result: BaseResultData) {
@@ -926,6 +1018,7 @@ module ZJNGEx {
                 // }
 
                 //注：经过多种，测试，目前不知什么方法可以实时替换content,只能退而求其次，修改player方法，在符合条件时使用mingzhi系列的content方法：
+                //注：目前已经获取，可以实时修改函数的方式，后续跟进迭代：
                 let tempchoosePlayerCard = lib.element.player.choosePlayerCard;
                 lib.element.player.choosePlayerCard = function (...args) {
                     let next: GameEvent = this.choosePlayerCard.source.apply(this, args);

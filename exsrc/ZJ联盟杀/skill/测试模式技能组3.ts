@@ -58,7 +58,7 @@ module ZJNGEx {
                         "step 0"
                         //当前的游戏模式：
                         let mode = get.mode();
-                        let canModes = [NG.GameModeConst.identity] as string[];
+                        let canModes = [NG.GameModeConst.identity,NG.GameModeConst.ZJSha_identity] as string[];
                         if (canModes.indexOf(mode) > -1) {
                             //当前的主公：
                             let zhu = player;
